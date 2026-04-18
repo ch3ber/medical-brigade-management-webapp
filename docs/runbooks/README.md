@@ -9,6 +9,12 @@ Each runbook has two versions:
 
 ---
 
+## Developer setup
+
+| #   | Runbook (EN)                               | Guía (ES)                                 | When                                       |
+| --- | ------------------------------------------ | ----------------------------------------- | ------------------------------------------ |
+| 00  | [Dev Environment](./00-dev-environment.md) | [Entorno local](./es/00-entorno-local.md) | Setting up local dev or switching to cloud |
+
 ## Critical — use during a live brigade
 
 | #   | Runbook (EN)                                               | Guía (ES)                                                     | When                                                      |
