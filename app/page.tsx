@@ -1,65 +1,61 @@
-import Image from 'next/image'
+import Link from 'next/link'
+import { ArrowRight, Stethoscope } from 'lucide-react'
+import { MobileShell } from '@/components/layout/MobileShell'
+import { Button } from '@/components/ui/button'
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex w-full max-w-3xl flex-1 flex-col items-center justify-between bg-white px-16 py-32 sm:items-start dark:bg-black">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl leading-10 font-semibold tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{' '}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <MobileShell>
+      <div className="relative flex flex-1 flex-col">
+        <div className="relative flex-1 overflow-hidden">
+          <div className="bg-brand-gradient absolute inset-0" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.35),transparent_60%)]" />
+          <div className="relative flex flex-col items-center px-6 pt-16 pb-8 text-center">
+            <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-white/15 ring-1 ring-white/30 backdrop-blur">
+              <Stethoscope
+                className="h-10 w-10 text-white"
+                strokeWidth={2}
+              />
+            </div>
+            <h1 className="mt-8 text-3xl font-bold text-balance text-white">Smart Care for Every Brigade</h1>
+            <p className="mt-3 max-w-xs text-sm text-balance text-white/80">
+              Organize brigades, register patients, and manage real-time queues across every area.
+            </p>
+          </div>
+        </div>
+
+        <div className="-mt-8 rounded-t-[2rem] bg-[var(--background)] px-6 pt-10 pb-10">
+          <div className="space-y-3">
+            <Link
+              href="/login"
+              className="block"
             >
-              Templates
-            </a>{' '}
-            or the{' '}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              <Button
+                size="lg"
+                className="w-full"
+              >
+                Get started
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Link
+              href="/dashboard"
+              className="block"
             >
-              Learning
-            </a>{' '}
-            center.
+              <Button
+                size="lg"
+                variant="soft"
+                className="w-full"
+              >
+                Continue as staff
+              </Button>
+            </Link>
+          </div>
+          <p className="mt-6 text-center text-xs text-[var(--muted)]">
+            Trusted care made simple with expert teams.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="bg-foreground text-background flex h-12 w-full items-center justify-center gap-2 rounded-full px-5 transition-colors hover:bg-[#383838] md:w-[158px] dark:hover:bg-[#ccc]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] md:w-[158px] dark:border-white/[.145] dark:hover:bg-[#1a1a1a]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </div>
+    </MobileShell>
   )
 }
