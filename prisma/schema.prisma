@@ -1,0 +1,177 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../shared/prisma/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// =====================================================================
+// Enums
+// =====================================================================
+
+enum AppRole {
+  PLATFORM_ADMIN
+  BRIGADE_DIRECTOR
+}
+
+enum BrigadeRole {
+  DIRECTOR
+  CO_DIRECTOR
+  STAFF
+}
+
+enum BrigadeStatus {
+  DRAFT
+  ACTIVE
+  CLOSED
+}
+
+enum TurnoStatus {
+  WAITING
+  CALLED
+  SERVED
+  MOVED
+  REMOVED
+}
+
+// =====================================================================
+// Models
+// =====================================================================
+
+/// Extends auth.users (managed by Supabase Auth) with app-specific fields.
+/// Created automatically by the on_auth_user_created trigger.
+model Profile {
+  id        String   @id @db.Uuid // matches auth.users.id
+  fullName  String   @map("full_name")
+  avatarUrl String?  @map("avatar_url")
+  role      AppRole  @default(BRIGADE_DIRECTOR)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  brigades           Brigade[]       @relation("BrigadeCreator")
+  brigadeMembers     BrigadeMember[]
+  patientsRegistered Patient[]       @relation("PatientRegistrar")
+
+  @@map("profiles")
+}
+
+/// A single-day medical event. Fully isolated — all data under a brigade
+/// stays within that brigade.
+model Brigade {
+  id          String        @id @default(uuid()) @db.Uuid
+  name        String
+  description String?
+  location    String
+  date        DateTime      @db.Date
+  status      BrigadeStatus @default(DRAFT)
+  openedAt    DateTime?     @map("opened_at")
+  closedAt    DateTime?     @map("closed_at")
+  createdBy   String        @map("created_by") @db.Uuid
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  creator  Profile         @relation("BrigadeCreator", fields: [createdBy], references: [id])
+  areas    Area[]
+  members  BrigadeMember[]
+  patients Patient[]
+  turnos   Turno[]
+
+  @@index([createdBy])
+  @@index([status])
+  @@map("brigades")
+}
+
+/// A medical station within a brigade. Configured by the director.
+model Area {
+  id                   String   @id @default(uuid()) @db.Uuid
+  brigadeId            String   @map("brigade_id") @db.Uuid
+  name                 String
+  prefix               String   @db.VarChar(4)
+  color                String   @db.VarChar(9)
+  patientLimit         Int?     @map("patient_limit")
+  order                Int      @default(0)
+  isActive             Boolean  @default(true) @map("is_active")
+  publicDashboardToken String?  @unique @default(uuid()) @map("public_dashboard_token") @db.Uuid
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+
+  brigade Brigade @relation(fields: [brigadeId], references: [id], onDelete: Cascade)
+  turnos  Turno[]
+
+  @@index([brigadeId, order])
+  @@map("areas")
+}
+
+/// Links a profile (or pending invite) to a brigade with a specific role.
+model BrigadeMember {
+  id                     String      @id @default(uuid()) @db.Uuid
+  brigadeId              String      @map("brigade_id") @db.Uuid
+  profileId              String?     @map("profile_id") @db.Uuid
+  email                  String
+  role                   BrigadeRole @default(STAFF)
+  generatedUsername      String?     @unique @map("generated_username")
+  generatedPasswordHash  String?     @map("generated_password_hash")
+  inviteToken            String?     @unique @map("invite_token") @db.Uuid
+  invitedAt              DateTime    @default(now()) @map("invited_at")
+  acceptedAt             DateTime?   @map("accepted_at")
+  retainAccessAfterClose Boolean     @default(false) @map("retain_access_after_close")
+  createdAt              DateTime    @default(now()) @map("created_at")
+  updatedAt              DateTime    @updatedAt @map("updated_at")
+
+  brigade Brigade  @relation(fields: [brigadeId], references: [id], onDelete: Cascade)
+  profile Profile? @relation(fields: [profileId], references: [id])
+
+  @@unique([brigadeId, profileId])
+  @@unique([brigadeId, email])
+  @@index([profileId, brigadeId], map: "idx_members_profile")
+  @@map("brigade_members")
+}
+
+/// A person registered during an active brigade. Scoped to one brigade.
+model Patient {
+  id               String   @id @default(uuid()) @db.Uuid
+  brigadeId        String   @map("brigade_id") @db.Uuid
+  fullName         String   @map("full_name")
+  age              Int
+  gender           String   @db.VarChar(16)
+  phone            String
+  address          String
+  wantsChurchVisit Boolean  @default(false) @map("wants_church_visit")
+  globalOrder      Int      @map("global_order")
+  registeredBy     String   @map("registered_by") @db.Uuid
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  brigade   Brigade @relation(fields: [brigadeId], references: [id], onDelete: Cascade)
+  registrar Profile @relation("PatientRegistrar", fields: [registeredBy], references: [id])
+  turnos    Turno[]
+
+  @@unique([brigadeId, globalOrder])
+  @@index([brigadeId, globalOrder], map: "idx_patients_brigade_order")
+  @@map("patients")
+}
+
+/// One row per patient per area visit. The turnos table IS the queue.
+model Turno {
+  id         String      @id @default(uuid()) @db.Uuid
+  brigadeId  String      @map("brigade_id") @db.Uuid
+  areaId     String      @map("area_id") @db.Uuid
+  patientId  String      @map("patient_id") @db.Uuid
+  areaOrder  Int         @map("area_order")
+  status     TurnoStatus @default(WAITING)
+  calledAt   DateTime?   @map("called_at")
+  servedAt   DateTime?   @map("served_at")
+  movedCount Int         @default(0) @map("moved_count")
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @updatedAt @map("updated_at")
+
+  brigade Brigade @relation(fields: [brigadeId], references: [id], onDelete: Cascade)
+  area    Area    @relation(fields: [areaId], references: [id])
+  patient Patient @relation(fields: [patientId], references: [id])
+
+  @@unique([areaId, areaOrder])
+  @@index([brigadeId, status], map: "idx_turnos_brigade_status")
+  @@map("turnos")
+}

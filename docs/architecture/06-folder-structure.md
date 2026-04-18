@@ -12,11 +12,11 @@ The project applies three complementary patterns inside a single Next.js applica
 
 ### Layer responsibilities
 
-| Layer | What lives here | Depends on |
-|---|---|---|
-| `domain/` | Entities, value objects, repository interfaces, domain events. Pure TypeScript — no frameworks, no ORMs, no HTTP. | Nothing |
-| `application/` | Use cases. Orchestrates domain objects. Defines what the system can do. | `domain/` only |
-| `infrastructure/` | Concrete implementations: Prisma repositories, Supabase clients, API route handlers, React components, hooks. | `domain/` + `application/` |
+| Layer             | What lives here                                                                                                   | Depends on                 |
+| ----------------- | ----------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `domain/`         | Entities, value objects, repository interfaces, domain events. Pure TypeScript — no frameworks, no ORMs, no HTTP. | Nothing                    |
+| `application/`    | Use cases. Orchestrates domain objects. Defines what the system can do.                                           | `domain/` only             |
+| `infrastructure/` | Concrete implementations: Prisma repositories, Supabase clients, API route handlers, React components, hooks.     | `domain/` + `application/` |
 
 ### Why not a monorepo yet
 
@@ -336,19 +336,19 @@ A repository interface (`ITurnoRepository.ts`) lives in `domain/`. Its Prisma im
 
 ## Naming conventions
 
-| Thing | Convention | Example |
-|---|---|---|
-| React components | PascalCase | `AreaDashboard.tsx` |
-| Domain entities | PascalCase | `Turno.ts`, `Brigade.ts` |
-| Value objects | PascalCase | `TurnoLabel.ts`, `AreaPrefix.ts` |
-| Repository interfaces | PascalCase with `I` prefix | `ITurnoRepository.ts` |
-| Repository implementations | kebab-case, technology prefix | `prisma-turno-repository.ts` |
-| Use cases | kebab-case, verb-noun | `call-next-turno.ts` |
-| Domain events | PascalCase, past tense | `TurnoCalled.ts` |
-| Hooks | kebab-case with `use-` prefix | `use-area-queue.ts` |
-| Utilities | kebab-case | `cn.ts` |
-| Test files | Same name + `.test.ts` | `call-next-turno.test.ts` |
-| E2E test files | kebab-case + `.spec.ts` | `patient-registration.spec.ts` |
+| Thing                      | Convention                    | Example                          |
+| -------------------------- | ----------------------------- | -------------------------------- |
+| React components           | PascalCase                    | `AreaDashboard.tsx`              |
+| Domain entities            | PascalCase                    | `Turno.ts`, `Brigade.ts`         |
+| Value objects              | PascalCase                    | `TurnoLabel.ts`, `AreaPrefix.ts` |
+| Repository interfaces      | PascalCase with `I` prefix    | `ITurnoRepository.ts`            |
+| Repository implementations | kebab-case, technology prefix | `prisma-turno-repository.ts`     |
+| Use cases                  | kebab-case, verb-noun         | `call-next-turno.ts`             |
+| Domain events              | PascalCase, past tense        | `TurnoCalled.ts`                 |
+| Hooks                      | kebab-case with `use-` prefix | `use-area-queue.ts`              |
+| Utilities                  | kebab-case                    | `cn.ts`                          |
+| Test files                 | Same name + `.test.ts`        | `call-next-turno.test.ts`        |
+| E2E test files             | kebab-case + `.spec.ts`       | `patient-registration.spec.ts`   |
 
 ---
 

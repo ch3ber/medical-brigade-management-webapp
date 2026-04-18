@@ -16,11 +16,11 @@ The app replaces manual paper-based shift management with a real-time digital sy
 
 ## Who uses it
 
-| User | What they do in the app |
-|---|---|
+| User                 | What they do in the app                                                                                       |
+| -------------------- | ------------------------------------------------------------------------------------------------------------- |
 | **Brigade Director** | Creates and configures brigades, sets up medical areas, invites staff, monitors the full brigade in real time |
-| **Brigade Staff** | Registers incoming patients, assigns them to an area, advances the queue during the event |
-| **Platform Admin** | Internal role with full access across all brigades for support and maintenance |
+| **Brigade Staff**    | Registers incoming patients, assigns them to an area, advances the queue during the event                     |
+| **Platform Admin**   | Internal role with full access across all brigades for support and maintenance                                |
 
 ---
 
@@ -28,16 +28,16 @@ The app replaces manual paper-based shift management with a real-time digital sy
 
 Read in order on your first pass. After that, jump directly to the relevant doc.
 
-| # | File | What it covers |
-|---|---|---|
-| 01 | `01-overview.md` | Core concepts, user flows, scope, and constraints |
-| 02 | `02-stack.md` | Full technology stack with version numbers and decision rationale |
-| 03 | `03-database-schema.md` | PostgreSQL schema, relationships, enums, indexes, and RLS policies |
-| 04 | `04-auth-and-roles.md` | Authentication flow, role system, and permission matrix |
-| 05 | `05-realtime-and-shifts.md` | Turno (shift) lifecycle, queue design, and Supabase Realtime integration |
-| 06 | `06-folder-structure.md` | Next.js project layout, file naming conventions |
-| 07 | `07-api-routes.md` | All API endpoints with request and response shapes |
-| 08 | `08-deployment.md` | Vercel + Supabase setup, environment variables, CI/CD |
+| #   | File                        | What it covers                                                           |
+| --- | --------------------------- | ------------------------------------------------------------------------ |
+| 01  | `01-overview.md`            | Core concepts, user flows, scope, and constraints                        |
+| 02  | `02-stack.md`               | Full technology stack with version numbers and decision rationale        |
+| 03  | `03-database-schema.md`     | PostgreSQL schema, relationships, enums, indexes, and RLS policies       |
+| 04  | `04-auth-and-roles.md`      | Authentication flow, role system, and permission matrix                  |
+| 05  | `05-realtime-and-shifts.md` | Turno (shift) lifecycle, queue design, and Supabase Realtime integration |
+| 06  | `06-folder-structure.md`    | Next.js project layout, file naming conventions                          |
+| 07  | `07-api-routes.md`          | All API endpoints with request and response shapes                       |
+| 08  | `08-deployment.md`          | Vercel + Supabase setup, environment variables, CI/CD                    |
 
 ---
 
