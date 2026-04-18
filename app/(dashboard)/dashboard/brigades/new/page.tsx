@@ -41,44 +41,44 @@ export default function NewBrigadePage() {
   return (
     <>
       <PageHeader
-        title="New brigade"
+        title="Nueva brigada"
         backHref="/dashboard/brigades"
       />
       <div className="space-y-5 px-5 pt-2 pb-4">
         <Field
           icon={<FileText className="h-4 w-4" />}
-          label="Brigade name"
+          label="Nombre de la brigada"
         >
           <Input
-            placeholder="San Miguel Health Day"
+            placeholder="Brigada San Miguel"
             required
           />
         </Field>
 
         <Field
           icon={<MapPin className="h-4 w-4" />}
-          label="Location"
+          label="Lugar"
         >
-          <Input placeholder="San Miguel Parish" />
+          <Input placeholder="Parroquia San Miguel" />
         </Field>
 
         <Field
           icon={<Calendar className="h-4 w-4" />}
-          label="Date"
+          label="Fecha"
         >
           <Input type="date" />
         </Field>
 
         <section>
           <div className="mb-3 flex items-center justify-between">
-            <h3 className="text-sm font-semibold">Areas</h3>
+            <h3 className="text-sm font-semibold">Áreas</h3>
             <button
               type="button"
               onClick={addArea}
               className="inline-flex items-center gap-1 text-xs font-medium text-[var(--accent)]"
             >
               <Plus className="h-3.5 w-3.5" />
-              Add area
+              Agregar área
             </button>
           </div>
 
@@ -92,17 +92,17 @@ export default function NewBrigadePage() {
                   <div
                     className="h-10 w-10 shrink-0 cursor-pointer rounded-[var(--radius-md)] shadow ring-2 ring-white"
                     style={{ background: area.color }}
-                    title="Color"
+                    title="Elegir color"
                   />
                   <div className="grid flex-1 grid-cols-2 gap-2">
                     <Input
-                      placeholder="Area name"
+                      placeholder="Nombre del área"
                       value={area.name}
                       onChange={(e) => updateArea(area.id, 'name', e.target.value)}
                       className="h-10 text-sm"
                     />
                     <Input
-                      placeholder="Prefix (GM)"
+                      placeholder="Prefijo (GM)"
                       value={area.prefix}
                       maxLength={4}
                       onChange={(e) => updateArea(area.id, 'prefix', e.target.value.toUpperCase())}
@@ -114,7 +114,7 @@ export default function NewBrigadePage() {
                       type="button"
                       onClick={() => removeArea(area.id)}
                       className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-500"
-                      aria-label="Remove area"
+                      aria-label="Eliminar área"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -147,7 +147,7 @@ export default function NewBrigadePage() {
           className="mt-2 w-full"
           type="submit"
         >
-          Create brigade
+          Crear brigada
         </Button>
       </div>
     </>

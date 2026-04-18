@@ -9,62 +9,62 @@ export default function RegisterPage() {
   return (
     <MobileShell>
       <PageHeader
-        title="Create account"
+        title="Crear cuenta"
         backHref="/login"
       />
       <main className="flex-1 px-6 pt-6 pb-10">
         <div className="space-y-2 text-center">
-          <h2 className="text-2xl font-bold">Join your brigade</h2>
-          <p className="text-sm text-[var(--muted)]">Create an account to start managing your brigade.</p>
+          <h2 className="text-2xl font-bold">Únete a tu brigada</h2>
+          <p className="text-sm text-[var(--muted)]">Crea una cuenta para gestionar tu brigada.</p>
         </div>
 
         <form className="mt-10 space-y-4">
           <label className="block">
-            <span className="ml-2 text-xs font-medium text-[var(--muted)]">Full name</span>
+            <span className="ml-2 text-xs font-medium text-[var(--muted)]">Nombre completo</span>
             <div className="relative mt-1">
               <User className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
               <Input
                 required
-                placeholder="Maria Lopez"
+                placeholder="María López"
                 className="pl-11"
               />
             </div>
           </label>
 
           <label className="block">
-            <span className="ml-2 text-xs font-medium text-[var(--muted)]">Email</span>
+            <span className="ml-2 text-xs font-medium text-[var(--muted)]">Correo electrónico</span>
             <div className="relative mt-1">
               <Mail className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
               <Input
                 type="email"
                 required
-                placeholder="you@brigade.org"
+                placeholder="tu@brigada.org"
                 className="pl-11"
               />
             </div>
           </label>
 
           <label className="block">
-            <span className="ml-2 text-xs font-medium text-[var(--muted)]">Password</span>
+            <span className="ml-2 text-xs font-medium text-[var(--muted)]">Contraseña</span>
             <div className="relative mt-1">
               <Lock className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
               <Input
                 type="password"
                 required
-                placeholder="At least 8 characters"
+                placeholder="Mínimo 8 caracteres"
                 className="pl-11"
               />
             </div>
           </label>
 
           <label className="block">
-            <span className="ml-2 text-xs font-medium text-[var(--muted)]">Confirm password</span>
+            <span className="ml-2 text-xs font-medium text-[var(--muted)]">Confirmar contraseña</span>
             <div className="relative mt-1">
               <Lock className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
               <Input
                 type="password"
                 required
-                placeholder="Repeat password"
+                placeholder="Repite la contraseña"
                 className="pl-11"
               />
             </div>
@@ -74,18 +74,18 @@ export default function RegisterPage() {
             size="lg"
             className="mt-4 w-full"
           >
-            Create account
+            Crear cuenta
             <ArrowRight className="h-4 w-4" />
           </Button>
         </form>
 
         <p className="mt-8 text-center text-xs text-[var(--muted)]">
-          Already have an account?{' '}
+          ¿Ya tienes cuenta?{' '}
           <Link
             href="/login"
             className="font-medium text-[var(--accent)]"
           >
-            Sign in
+            Ingresar
           </Link>
         </p>
       </main>

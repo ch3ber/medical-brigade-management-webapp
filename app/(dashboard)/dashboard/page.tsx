@@ -10,9 +10,9 @@ import { mockBrigades } from '@/shared/lib/mock-data'
 
 const specialties = [
   { label: 'General', icon: Stethoscope, color: '#4b6bfb' },
-  { label: 'Dentistry', icon: Cross, color: '#16a34a' },
-  { label: 'Pediatrics', icon: Baby, color: '#f59e0b' },
-  { label: 'Pharmacy', icon: Pill, color: '#8b5cf6' },
+  { label: 'Odontología', icon: Cross, color: '#16a34a' },
+  { label: 'Pediatría', icon: Baby, color: '#f59e0b' },
+  { label: 'Farmacia', icon: Pill, color: '#8b5cf6' },
   { label: 'Cardio', icon: Heart, color: '#ef4444' },
 ]
 
@@ -24,14 +24,14 @@ export default function DashboardHomePage() {
     <>
       <TopGreeting
         name="Eber"
-        subtitle="Ready for today's brigade?"
+        subtitle="¿Listo para la brigada de hoy?"
       />
 
       <div className="px-5 pt-5">
         <div className="relative">
           <Search className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
           <Input
-            placeholder="Search brigades or patients"
+            placeholder="Buscar brigadas o pacientes"
             className="pl-11"
           />
         </div>
@@ -63,11 +63,11 @@ export default function DashboardHomePage() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.25),transparent_60%)]" />
             <div className="relative p-5">
               <div className="flex items-center justify-between">
-                <Badge className="border-0 bg-white/20 text-white">Active brigade</Badge>
+                <Badge className="border-0 bg-white/20 text-white">Brigada activa</Badge>
                 <Link
                   href={`/dashboard/brigades/${active.id}`}
                   className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-white/15 transition hover:bg-white/25"
-                  aria-label="Open"
+                  aria-label="Abrir"
                 >
                   <ArrowUpRight className="h-4 w-4" />
                 </Link>
@@ -78,11 +78,11 @@ export default function DashboardHomePage() {
               </p>
               <div className="mt-5 grid grid-cols-2 gap-2">
                 <div className="rounded-[var(--radius-md)] bg-white/15 px-3 py-2 backdrop-blur">
-                  <p className="text-[10px] tracking-wide text-white/70 uppercase">Patients</p>
+                  <p className="text-[10px] tracking-wide text-white/70 uppercase">Pacientes</p>
                   <p className="font-semibold">{active.patientsCount}</p>
                 </div>
                 <div className="rounded-[var(--radius-md)] bg-white/15 px-3 py-2 backdrop-blur">
-                  <p className="text-[10px] tracking-wide text-white/70 uppercase">Areas</p>
+                  <p className="text-[10px] tracking-wide text-white/70 uppercase">Áreas</p>
                   <p className="font-semibold">{active.areasCount}</p>
                 </div>
               </div>
@@ -96,7 +96,7 @@ export default function DashboardHomePage() {
                   className="w-full border-0 bg-white text-[var(--accent)]"
                 >
                   <Plus className="h-4 w-4" />
-                  Register patient
+                  Registrar paciente
                 </Button>
               </Link>
             </div>
@@ -106,12 +106,12 @@ export default function DashboardHomePage() {
 
       <section className="px-5 pt-6">
         <div className="flex items-center justify-between">
-          <h3 className="font-semibold">Recent brigades</h3>
+          <h3 className="font-semibold">Brigadas recientes</h3>
           <Link
             href="/dashboard/brigades"
             className="text-xs font-medium text-[var(--accent)]"
           >
-            See all
+            Ver todas
           </Link>
         </div>
         <div className="mt-3 space-y-3">

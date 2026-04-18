@@ -8,29 +8,29 @@ import { Separator } from '@/components/ui/separator'
 
 const menuSections = [
   {
-    title: 'Account',
+    title: 'Cuenta',
     items: [
       { icon: Mail, label: 'Email', value: 'eberalejo@proton.me' },
       { icon: Phone, label: 'Phone', value: '+503 0000 0000' },
     ],
   },
   {
-    title: 'Preferences',
+    title: 'Preferencias',
     items: [
-      { icon: Bell, label: 'Notifications', href: '#' },
-      { icon: Shield, label: 'Privacy', href: '#' },
+      { icon: Bell, label: 'Notificaciones', href: '#' },
+      { icon: Shield, label: 'Privacidad', href: '#' },
     ],
   },
   {
-    title: 'Support',
-    items: [{ icon: HelpCircle, label: 'Help & Runbooks', href: '#' }],
+    title: 'Soporte',
+    items: [{ icon: HelpCircle, label: 'Ayuda y runbooks', href: '#' }],
   },
 ]
 
 export default function ProfilePage() {
   return (
     <>
-      <PageHeader title="Profile" />
+      <PageHeader title="Perfil" />
 
       <div className="space-y-5 px-5 pt-4 pb-4">
         <div className="flex flex-col items-center gap-3 py-4">
@@ -43,7 +43,7 @@ export default function ProfilePage() {
             <h2 className="text-lg font-bold">Eber Alejo</h2>
             <p className="text-sm text-[var(--muted)]">eberalejo@proton.me</p>
           </div>
-          <Badge variant="primary">DIRECTOR</Badge>
+          <Badge variant="primary">Director</Badge>
         </div>
 
         {menuSections.map(({ title, items }) => (
@@ -89,7 +89,7 @@ export default function ProfilePage() {
 
         <button className="flex w-full items-center gap-3 rounded-[var(--radius-lg)] border border-red-100 bg-red-50 px-5 py-3 text-red-600 transition hover:bg-red-100">
           <LogOut className="h-4 w-4" />
-          <span className="text-sm font-medium">Sign out</span>
+          <span className="text-sm font-medium">Cerrar sesión</span>
         </button>
       </div>
     </>

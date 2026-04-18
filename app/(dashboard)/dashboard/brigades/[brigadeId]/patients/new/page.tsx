@@ -16,12 +16,12 @@ export default async function NewPatientPage({ params }: Props) {
   return (
     <>
       <PageHeader
-        title="Register patient"
+        title="Registrar paciente"
         backHref={`/dashboard/brigades/${brigadeId}`}
       />
       <div className="px-5 pt-2 pb-4">
         <p className="mb-5 text-sm text-[var(--muted)]">
-          Adding a patient to <span className="font-medium text-[var(--foreground)]">{brigade.name}</span>
+          Agregando paciente a <span className="font-medium text-[var(--foreground)]">{brigade.name}</span>
         </p>
         <PatientForm areas={areas} />
       </div>

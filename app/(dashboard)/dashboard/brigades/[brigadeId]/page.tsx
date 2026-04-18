@@ -22,19 +22,19 @@ export default async function BrigadeDetailPage({ params }: Props) {
   return (
     <>
       <PageHeader
-        title="Brigade"
+        title="Brigada"
         backHref="/dashboard/brigades"
         right={
           <div className="flex gap-2">
             <button
               className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] transition hover:bg-[var(--surface-muted)]"
-              aria-label="Favorite"
+              aria-label="Favorito"
             >
               <Heart className="h-4 w-4" />
             </button>
             <button
               className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] transition hover:bg-[var(--surface-muted)]"
-              aria-label="Share"
+              aria-label="Compartir"
             >
               <Share2 className="h-4 w-4" />
             </button>
@@ -65,17 +65,17 @@ export default async function BrigadeDetailPage({ params }: Props) {
 
       <section className="grid grid-cols-3 gap-2 px-5 pt-4">
         <StatTile
-          label="Patients"
+          label="Pacientes"
           value={brigade.patientsCount}
           icon={<Users className="h-3 w-3" />}
         />
         <StatTile
-          label="Areas"
+          label="Áreas"
           value={brigade.areasCount}
           icon={<Calendar className="h-3 w-3" />}
         />
         <StatTile
-          label="Waiting"
+          label="Esperando"
           value={totalWaiting}
           icon={<Users className="h-3 w-3" />}
         />
@@ -91,7 +91,7 @@ export default async function BrigadeDetailPage({ params }: Props) {
             className="w-full"
           >
             <UserPlus className="h-4 w-4" />
-            Register patient
+            Registrar paciente
           </Button>
         </Link>
         <Link href={`/dashboard/brigades/${brigadeId}/settings`}>
@@ -106,13 +106,13 @@ export default async function BrigadeDetailPage({ params }: Props) {
 
       <section className="px-5 pt-6 pb-4">
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="font-semibold">Areas</h3>
+          <h3 className="font-semibold">Áreas</h3>
           <Link
             href={`/dashboard/brigades/${brigadeId}/settings`}
             className="inline-flex items-center gap-1 text-xs font-medium text-[var(--accent)]"
           >
             <Plus className="h-3.5 w-3.5" />
-            Add area
+            Agregar área
           </Link>
         </div>
         <div className="space-y-3">

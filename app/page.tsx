@@ -17,9 +17,11 @@ export default function LandingPage() {
                 strokeWidth={2}
               />
             </div>
-            <h1 className="mt-8 text-3xl font-bold text-balance text-white">Smart Care for Every Brigade</h1>
+            <h1 className="mt-8 text-3xl font-bold text-balance text-white">
+              Atención inteligente para cada brigada
+            </h1>
             <p className="mt-3 max-w-xs text-sm text-balance text-white/80">
-              Organize brigades, register patients, and manage real-time queues across every area.
+              Organiza brigadas, registra pacientes y gestiona colas en tiempo real en cada área.
             </p>
           </div>
         </div>
@@ -34,7 +36,7 @@ export default function LandingPage() {
                 size="lg"
                 className="w-full"
               >
-                Get started
+                Comenzar
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -47,12 +49,12 @@ export default function LandingPage() {
                 variant="soft"
                 className="w-full"
               >
-                Continue as staff
+                Continuar como personal
               </Button>
             </Link>
           </div>
           <p className="mt-6 text-center text-xs text-[var(--muted)]">
-            Trusted care made simple with expert teams.
+            Atención de confianza con equipos expertos.
           </p>
         </div>
       </div>

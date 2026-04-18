@@ -21,7 +21,7 @@ export function ServedList({ items }: { items: ServedTurno[] }) {
             <p className="text-sm font-medium">{t.label}</p>
             <p className="text-xs text-[var(--muted)]">{t.patientName}</p>
           </div>
-          <span className="text-xs text-[var(--muted)]">Served</span>
+          <span className="text-xs text-[var(--muted)]">Atendido</span>
         </Card>
       ))}
     </div>

@@ -14,7 +14,7 @@ export function AreaDashboard({ areaName, current, waiting, served }: AreaDashbo
   return (
     <div className="space-y-5">
       <div>
-        <p className="text-xs text-[var(--muted)]">Area</p>
+        <p className="text-xs text-[var(--muted)]">Área</p>
         <h2 className="text-xl font-bold">{areaName}</h2>
       </div>
       <CurrentTurnoDisplay
@@ -24,14 +24,14 @@ export function AreaDashboard({ areaName, current, waiting, served }: AreaDashbo
       />
       <section>
         <div className="mb-2 flex items-center justify-between">
-          <h3 className="text-sm font-semibold">Waiting</h3>
-          <span className="text-xs text-[var(--muted)]">{waiting.length} people</span>
+          <h3 className="text-sm font-semibold">En espera</h3>
+          <span className="text-xs text-[var(--muted)]">{waiting.length} personas</span>
         </div>
         <WaitingQueue items={waiting} />
       </section>
       {served.length > 0 && (
         <section>
-          <h3 className="mb-2 text-sm font-semibold">Recently served</h3>
+          <h3 className="mb-2 text-sm font-semibold">Atendidos recientemente</h3>
           <ServedList items={served} />
         </section>
       )}
