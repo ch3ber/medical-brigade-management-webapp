@@ -1,0 +1,8 @@
+node_modules
+.next
+build
+coverage
+bun.lock
+*.log
+prisma/migrations
+shared/prisma/generated
