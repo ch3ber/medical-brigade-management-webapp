@@ -1,0 +1,3 @@
+# Please do not edit this manually. It is set automatically by Prisma when migrations run.
+
+provider = "postgresql"
