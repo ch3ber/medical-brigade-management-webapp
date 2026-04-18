@@ -6,10 +6,10 @@ import { Home, Calendar, Users, User } from 'lucide-react'
 import { cn } from '@/shared/lib/cn'
 
 const items = [
-  { href: '/dashboard', label: 'Home', icon: Home },
-  { href: '/dashboard/brigades', label: 'Brigades', icon: Calendar },
-  { href: '/dashboard/patients', label: 'Patients', icon: Users },
-  { href: '/dashboard/profile', label: 'Profile', icon: User },
+  { href: '/dashboard', label: 'Inicio', icon: Home },
+  { href: '/dashboard/brigades', label: 'Brigadas', icon: Calendar },
+  { href: '/dashboard/patients', label: 'Pacientes', icon: Users },
+  { href: '/dashboard/profile', label: 'Perfil', icon: User },
 ]
 
 export function BottomNav() {

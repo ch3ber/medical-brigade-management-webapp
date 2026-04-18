@@ -46,32 +46,32 @@ export default function BrigadeSettingsPage({ params }: Props) {
   return (
     <>
       <PageHeader
-        title="Settings"
+        title="Configuración"
         backHref={`/dashboard/brigades/${brigadeId}`}
       />
 
       <div className="space-y-6 px-5 pt-2 pb-4">
         <Card>
           <CardHeader>
-            <CardTitle>Brigade info</CardTitle>
+            <CardTitle>Información de la brigada</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <label className="block">
-              <span className="ml-2 text-xs text-[var(--muted)]">Name</span>
+              <span className="ml-2 text-xs text-[var(--muted)]">Nombre</span>
               <Input
                 defaultValue="San Miguel Health Day"
                 className="mt-1"
               />
             </label>
             <label className="block">
-              <span className="ml-2 text-xs text-[var(--muted)]">Location</span>
+              <span className="ml-2 text-xs text-[var(--muted)]">Lugar</span>
               <Input
-                defaultValue="San Miguel Parish"
+                defaultValue="Parroquia San Miguel"
                 className="mt-1"
               />
             </label>
             <label className="block">
-              <span className="ml-2 text-xs text-[var(--muted)]">Date</span>
+              <span className="ml-2 text-xs text-[var(--muted)]">Fecha</span>
               <Input
                 type="date"
                 defaultValue="2026-04-18"
@@ -82,7 +82,7 @@ export default function BrigadeSettingsPage({ params }: Props) {
               size="md"
               className="mt-2 w-full"
             >
-              Save changes
+              Guardar cambios
             </Button>
           </CardContent>
         </Card>
@@ -90,14 +90,14 @@ export default function BrigadeSettingsPage({ params }: Props) {
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle>Areas</CardTitle>
+              <CardTitle>Áreas</CardTitle>
               <button
                 type="button"
                 onClick={addArea}
                 className="inline-flex items-center gap-1 text-xs font-medium text-[var(--accent)]"
               >
                 <Plus className="h-3.5 w-3.5" />
-                Add
+                Agregar
               </button>
             </div>
           </CardHeader>
@@ -114,13 +114,13 @@ export default function BrigadeSettingsPage({ params }: Props) {
                 <div className="grid min-w-0 flex-1 grid-cols-2 gap-2">
                   <Input
                     value={area.name}
-                    placeholder="Area name"
+                    placeholder="Nombre del área"
                     onChange={(e) => update(area.id, 'name', e.target.value)}
                     className="h-10 text-sm"
                   />
                   <Input
                     value={area.prefix}
-                    placeholder="Prefix"
+                    placeholder="Prefijo"
                     maxLength={4}
                     onChange={(e) => update(area.id, 'prefix', e.target.value.toUpperCase())}
                     className="h-10 text-sm"
@@ -130,7 +130,7 @@ export default function BrigadeSettingsPage({ params }: Props) {
                   type="button"
                   onClick={() => remove(area.id)}
                   className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-500"
-                  aria-label="Remove"
+                  aria-label="Eliminar"
                 >
                   <Trash2 className="h-4 w-4" />
                 </button>
@@ -141,7 +141,7 @@ export default function BrigadeSettingsPage({ params }: Props) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Members</CardTitle>
+            <CardTitle>Miembros</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             {[
@@ -159,7 +159,9 @@ export default function BrigadeSettingsPage({ params }: Props) {
                 <div className="min-w-0 flex-1">
                   <p className="truncate text-sm font-medium">{name}</p>
                 </div>
-                <Badge variant={role === 'DIRECTOR' ? 'primary' : 'muted'}>{role}</Badge>
+                <Badge variant={role === 'DIRECTOR' ? 'primary' : 'muted'}>
+                  {role === 'DIRECTOR' ? 'Director' : 'Personal'}
+                </Badge>
               </div>
             ))}
             <Separator className="my-2" />
@@ -169,7 +171,7 @@ export default function BrigadeSettingsPage({ params }: Props) {
               className="w-full"
             >
               <Users className="h-4 w-4" />
-              Invite member
+              Invitar miembro
             </Button>
           </CardContent>
         </Card>
@@ -182,14 +184,14 @@ export default function BrigadeSettingsPage({ params }: Props) {
               className="w-full"
             >
               <Copy className="h-4 w-4" />
-              Clone brigade
+              Clonar brigada
             </Button>
             <Button
               size="md"
               className="w-full border border-red-100 bg-red-50 text-red-600 hover:bg-red-100"
             >
               <AlertTriangle className="h-4 w-4" />
-              Close brigade
+              Cerrar brigada
             </Button>
           </CardContent>
         </Card>

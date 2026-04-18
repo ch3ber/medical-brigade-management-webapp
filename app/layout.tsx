@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Medical Brigade',
-  description: 'Manage medical brigades, patients, areas, and turnos.',
+  title: 'Brigada Médica',
+  description: 'Gestiona brigadas médicas, pacientes, áreas y turnos.',
 }
 
 export default function RootLayout({
@@ -24,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="es"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">{children}</body>

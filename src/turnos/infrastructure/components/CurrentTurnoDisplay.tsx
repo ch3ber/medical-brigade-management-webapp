@@ -16,13 +16,13 @@ export function CurrentTurnoDisplay({ label, patientName, age }: CurrentTurnoDis
   if (!label) {
     return (
       <Card className="p-6 text-center">
-        <p className="text-sm text-[var(--muted)]">No turno is being served.</p>
+        <p className="text-sm text-[var(--muted)]">Ningún turno está siendo atendido.</p>
         <Button
           size="md"
           className="mt-4"
         >
           <PhoneCall className="h-4 w-4" />
-          Call next
+          Llamar siguiente
         </Button>
       </Card>
     )
@@ -31,7 +31,7 @@ export function CurrentTurnoDisplay({ label, patientName, age }: CurrentTurnoDis
     <Card className="relative overflow-hidden border-0 p-0 text-white">
       <div className="bg-brand-gradient absolute inset-0" />
       <div className="relative p-6">
-        <p className="text-xs font-medium tracking-widest text-white/70 uppercase">Now serving</p>
+        <p className="text-xs font-medium tracking-widest text-white/70 uppercase">Atendiendo ahora</p>
         <div className="mt-2 flex items-center gap-4">
           <Avatar
             initials={patientName?.slice(0, 1) ?? '?'}
@@ -42,7 +42,7 @@ export function CurrentTurnoDisplay({ label, patientName, age }: CurrentTurnoDis
             <p className="text-4xl font-extrabold tracking-tight">{label}</p>
             {patientName && (
               <p className="text-sm text-white/90">
-                {patientName} · {age} yrs
+                {patientName} · {age} años
               </p>
             )}
           </div>
@@ -54,7 +54,7 @@ export function CurrentTurnoDisplay({ label, patientName, age }: CurrentTurnoDis
             className="w-full border-0 bg-white text-[var(--accent)]"
           >
             <PhoneCall className="h-4 w-4" />
-            Next
+            Siguiente
           </Button>
           <Button
             variant="secondary"
@@ -62,7 +62,7 @@ export function CurrentTurnoDisplay({ label, patientName, age }: CurrentTurnoDis
             className="w-full border-0 bg-white/15 text-white backdrop-blur hover:bg-white/25"
           >
             <SkipForward className="h-4 w-4" />
-            Move
+            Mover
           </Button>
           <Button
             variant="destructive"
@@ -70,7 +70,7 @@ export function CurrentTurnoDisplay({ label, patientName, age }: CurrentTurnoDis
             className="w-full"
           >
             <XCircle className="h-4 w-4" />
-            Remove
+            Retirar
           </Button>
         </div>
       </div>

@@ -51,11 +51,11 @@ export function BrigadeCard({
         </div>
         <div className="mt-4 flex items-center gap-2">
           <div className="flex-1 rounded-[var(--radius-md)] bg-[var(--surface-muted)] px-3 py-2">
-            <p className="text-xs text-[var(--muted)]">Patients</p>
+            <p className="text-xs text-[var(--muted)]">Pacientes</p>
             <p className="text-sm font-semibold">{patientsCount}</p>
           </div>
           <div className="flex-1 rounded-[var(--radius-md)] bg-[var(--surface-muted)] px-3 py-2">
-            <p className="text-xs text-[var(--muted)]">Areas</p>
+            <p className="text-xs text-[var(--muted)]">Áreas</p>
             <p className="text-sm font-semibold">{areasCount}</p>
           </div>
         </div>

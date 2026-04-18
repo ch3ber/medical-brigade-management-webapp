@@ -27,7 +27,7 @@ export default function PatientsPage() {
   return (
     <>
       <PageHeader
-        title="Patients"
+        title="Pacientes"
         backHref="/dashboard"
       />
 
@@ -36,13 +36,13 @@ export default function PatientsPage() {
           <div className="relative flex-1">
             <Search className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
             <Input
-              placeholder="Search by name or turno"
+              placeholder="Buscar por nombre o turno"
               className="pl-11"
             />
           </div>
           <button
             className="bg-brand-gradient inline-flex h-12 w-12 items-center justify-center rounded-full text-white"
-            aria-label="Filter"
+            aria-label="Filtrar"
           >
             <Filter className="h-4 w-4" />
           </button>
@@ -50,7 +50,7 @@ export default function PatientsPage() {
       </div>
 
       <div className="no-scrollbar flex gap-2 overflow-x-auto px-5 pt-5">
-        {(['All', 'Waiting', 'Called', 'Served'] as const).map((label, i) => (
+        {(['Todos', 'Esperando', 'Llamado', 'Atendido'] as const).map((label, i) => (
           <button
             key={label}
             className={
@@ -66,7 +66,7 @@ export default function PatientsPage() {
       </div>
 
       <p className="px-5 pt-5 text-xs text-[var(--muted)]">
-        {allPatients.length} patients · San Miguel Health Day
+        {allPatients.length} pacientes · San Miguel Health Day
       </p>
 
       <div className="space-y-2 px-5 pt-3 pb-4">
@@ -83,7 +83,7 @@ export default function PatientsPage() {
               <p className="truncate text-sm font-semibold">{p.name}</p>
               <p className="inline-flex items-center gap-1 text-xs text-[var(--muted)]">
                 <MapPin className="h-3 w-3" />
-                {p.age} yrs · {p.labels.join(', ')}
+                {p.age} años · {p.labels.join(', ')}
               </p>
             </div>
             <Badge
@@ -97,7 +97,13 @@ export default function PatientsPage() {
                       : 'muted'
               }
             >
-              {p.status}
+              {p.status === 'CALLED'
+                ? 'Llamado'
+                : p.status === 'SERVED'
+                  ? 'Atendido'
+                  : p.status === 'WAITING'
+                    ? 'Esperando'
+                    : p.status}
             </Badge>
           </Card>
         ))}

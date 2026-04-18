@@ -18,7 +18,7 @@ export function PageHeader({
       {backHref ? (
         <Link
           href={backHref}
-          aria-label="Back"
+          aria-label="Volver"
           className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[var(--border)] bg-[var(--surface)] transition hover:bg-[var(--surface-muted)]"
         >
           <ArrowLeft className="h-4 w-4" />

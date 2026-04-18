@@ -15,7 +15,7 @@ export default function BrigadeListPage() {
           <Link
             href="/dashboard/brigades/new"
             className="bg-brand-gradient inline-flex h-11 w-11 items-center justify-center rounded-full text-white shadow-[0_10px_30px_-10px_rgb(75_107_251/0.6)]"
-            aria-label="New brigade"
+            aria-label="Nueva brigada"
           >
             <Plus className="h-4 w-4" />
           </Link>
@@ -27,13 +27,13 @@ export default function BrigadeListPage() {
           <div className="relative flex-1">
             <Search className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
             <Input
-              placeholder="Search brigades"
+              placeholder="Buscar brigadas"
               className="pl-11"
             />
           </div>
           <button
             className="bg-brand-gradient inline-flex h-12 w-12 items-center justify-center rounded-full text-white"
-            aria-label="Filter"
+            aria-label="Filtrar"
           >
             <Filter className="h-4 w-4" />
           </button>
@@ -41,7 +41,7 @@ export default function BrigadeListPage() {
       </div>
 
       <div className="no-scrollbar flex gap-2 overflow-x-auto px-5 pt-5">
-        {(['All', 'Active', 'Draft', 'Closed'] as const).map((label, i) => (
+        {(['Todas', 'Activas', 'Borrador', 'Cerradas'] as const).map((label, i) => (
           <button
             key={label}
             className={

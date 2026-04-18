@@ -41,16 +41,16 @@ export function AreaCard({
           <div className="min-w-0 flex-1">
             <h4 className="truncate text-sm font-semibold">{name}</h4>
             <p className="text-xs text-[var(--muted)]">
-              {waitingCount} waiting · {servedCount} served
+              {waitingCount} esperando · {servedCount} atendidos
             </p>
           </div>
           <ArrowUpRight className="h-4 w-4 text-[var(--muted)]" />
         </div>
         <div className="mt-3 flex items-center justify-between">
           {currentLabel ? (
-            <Badge variant="primary">Now: {currentLabel}</Badge>
+            <Badge variant="primary">Llamado: {currentLabel}</Badge>
           ) : (
-            <Badge variant="muted">Idle</Badge>
+            <Badge variant="muted">En espera</Badge>
           )}
           <span className="inline-flex items-center gap-1 text-xs text-[var(--muted)]">
             <Users className="h-3.5 w-3.5" />

@@ -24,10 +24,10 @@ export function PatientForm({ areas }: { areas: PatientFormAreaOption[] }) {
     <form className="space-y-5">
       <Field
         icon={<User className="h-4 w-4" />}
-        label="Full name"
+        label="Nombre completo"
       >
         <Input
-          placeholder="Maria Lopez"
+          placeholder="María López"
           required
         />
       </Field>
@@ -35,7 +35,7 @@ export function PatientForm({ areas }: { areas: PatientFormAreaOption[] }) {
       <div className="grid grid-cols-2 gap-3">
         <Field
           icon={<CalendarDays className="h-4 w-4" />}
-          label="Age"
+          label="Edad"
         >
           <Input
             type="number"
@@ -47,7 +47,7 @@ export function PatientForm({ areas }: { areas: PatientFormAreaOption[] }) {
         </Field>
         <Field
           icon={<Phone className="h-4 w-4" />}
-          label="Phone"
+          label="Teléfono"
         >
           <Input
             type="tel"
@@ -59,7 +59,7 @@ export function PatientForm({ areas }: { areas: PatientFormAreaOption[] }) {
       <div>
         <label className="ml-2 inline-flex items-center gap-2 text-xs font-medium text-[var(--muted)]">
           <Stethoscope className="h-3.5 w-3.5" />
-          Assign to areas
+          Asignar a áreas
         </label>
         <Card className="mt-2 p-3">
           <div className="flex flex-wrap gap-2">
@@ -93,7 +93,8 @@ export function PatientForm({ areas }: { areas: PatientFormAreaOption[] }) {
           </div>
         </Card>
         <p className="mt-2 ml-2 text-xs text-[var(--muted)]">
-          {selected.length} area{selected.length === 1 ? '' : 's'} selected
+          {selected.length} área{selected.length === 1 ? '' : 's'} seleccionada
+          {selected.length === 1 ? '' : 's'}
         </p>
       </div>
 
@@ -102,7 +103,7 @@ export function PatientForm({ areas }: { areas: PatientFormAreaOption[] }) {
         className="mt-2 w-full"
         type="submit"
       >
-        Register and generate turnos
+        Registrar y generar turnos
       </Button>
     </form>
   )
