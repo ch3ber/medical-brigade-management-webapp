@@ -26,6 +26,7 @@ Patient data and other areas are not affected.
 ## Immediate steps (during a live brigade)
 
 ### Step 1 — Rule out a UI issue
+
 Before assuming the queue is stuck in the database, confirm it is not a frontend issue:
 
 1. Reload the area dashboard page.
@@ -35,12 +36,15 @@ Before assuming the queue is stuck in the database, confirm it is not a frontend
 If the API returns an error, note the error code and message — they map to a specific cause in `architecture/07-api-routes.md`.
 
 ### Step 2 — Verify the stuck state via the director overview
+
 The director can see all area queues from the brigade overview. Confirm:
+
 - Which turno is `CALLED` (label and patient name).
 - How long it has been in that state (`calledAt` timestamp).
 - How many turnos are `WAITING` behind it.
 
 ### Step 3 — Resolve via the UI (preferred)
+
 If the staff dashboard is accessible, use the director account to navigate directly to the area dashboard and force-resolve the stuck turno:
 
 - **If the patient was attended:** tap "Attended" → turno → `SERVED`, next `WAITING` → `CALLED`.
@@ -112,6 +116,7 @@ WHERE id = (
 ```
 
 ### Step 5 — Notify the area dashboard
+
 After the SQL update, Supabase Realtime will broadcast the change automatically. The area dashboard should update within ~2 seconds. If it does not, have staff reload the page.
 
 ---
@@ -119,6 +124,7 @@ After the SQL update, Supabase Realtime will broadcast the change automatically.
 ## Verification
 
 After resolution, confirm:
+
 1. The area dashboard shows a new `CALLED` turno (or shows the queue as empty if no `WAITING` turnos remain).
 2. The director overview reflects the updated counts.
 3. Staff can press "Next" and the queue advances normally.
@@ -128,12 +134,14 @@ After resolution, confirm:
 ## Root cause investigation (post-incident)
 
 Check Vercel function logs for the time window of the incident:
+
 ```
 Vercel Dashboard → Project → Functions → Logs
 Filter by: /api/v1/brigades/[brigadeId]/areas/[areaId]/next
 ```
 
 Common causes:
+
 - **Network timeout during API call** — the staff tapped "Next", the request timed out, the DB was not updated. Resolved by Step 3 or 4 above.
 - **Browser crash mid-request** — same as above.
 - **Advisory lock deadlock** — extremely rare. Two simultaneous requests conflicted. The lock times out automatically and both requests fail. Resolved by retrying the action.

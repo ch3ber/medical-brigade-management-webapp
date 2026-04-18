@@ -26,12 +26,12 @@ Two patient records exist for the same physical person within the same brigade. 
 
 From the director overview, go to the patient list and search by name. Note:
 
-| Field | Record A (keep) | Record B (remove) |
-|---|---|---|
-| `id` | | |
-| `globalOrder` | lower number (arrived first) | higher number |
-| `createdAt` | earlier | later |
-| Turnos | check status per area | check status per area |
+| Field         | Record A (keep)              | Record B (remove)     |
+| ------------- | ---------------------------- | --------------------- |
+| `id`          |                              |                       |
+| `globalOrder` | lower number (arrived first) | higher number         |
+| `createdAt`   | earlier                      | later                 |
+| Turnos        | check status per area        | check status per area |
 
 The record to **keep** is the one with the lower `globalOrder` (registered first). The record to **remove** is the duplicate.
 
@@ -125,6 +125,7 @@ Let the patient know their correct turno number(s) so they can continue waiting 
 ## Verification
 
 After cleanup:
+
 1. Searching the patient's name in the brigade shows one active record and one flagged as `[DUPLICADO]`.
 2. The kept record has correct turnos for all needed areas.
 3. No area queue has a `WAITING` or `CALLED` turno belonging to the duplicate record.

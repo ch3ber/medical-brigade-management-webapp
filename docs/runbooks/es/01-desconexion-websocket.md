@@ -26,6 +26,7 @@ O bien: la cola dejó de actualizarse aunque sí se están atendiendo pacientes.
 ### Paso 1 — Recarga la página
 
 En la tablet o teléfono, recarga el navegador:
+
 - **Android / Chrome:** Toca los tres puntos (⋮) → "Recargar"
 - **iPhone / Safari:** Toca el ícono de recarga (⟳) en la barra de direcciones
 - **Computadora:** Presiona `F5` o `Ctrl + R`
@@ -39,6 +40,7 @@ Espera 5 segundos. El aviso de error debería desaparecer y la cola debería mos
 ### Paso 2 — Si recargar no funciona
 
 Verifica que el dispositivo tenga internet:
+
 - Abre otra aplicación o página web en el mismo dispositivo.
 - Si tampoco carga, el problema es la red WiFi o datos del dispositivo — no el sistema.
 - Conéctate a otra red WiFi o activa los datos móviles e intenta recargar de nuevo.
@@ -58,6 +60,7 @@ El sistema puede estar presentando una falla temporal. Mientras se resuelve:
 ### Paso 4 — Si el problema persiste más de 10 minutos
 
 Contacta al administrador de la plataforma. Comparte:
+
 - La hora aproximada en que empezó el problema.
 - El nombre de la brigada y el área afectada.
 - Qué dispositivo y red estás usando.

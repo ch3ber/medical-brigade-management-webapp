@@ -14,50 +14,51 @@ The app has two independent role layers that work together.
 
 Assigned globally. Determines what a user can do across the entire platform.
 
-| Role | Who | How they are created |
-|---|---|---|
-| `PLATFORM_ADMIN` | Internal team | Manually set directly in the DB. Never via the UI. |
+| Role               | Who                 | How they are created                                             |
+| ------------------ | ------------------- | ---------------------------------------------------------------- |
+| `PLATFORM_ADMIN`   | Internal team       | Manually set directly in the DB. Never via the UI.               |
 | `BRIGADE_DIRECTOR` | Any registered user | Default role on sign-up. Open registration — no invite required. |
 
 ### 2. Brigade-level role (`brigade_members.role`)
 
 Assigned per brigade. A user can have different roles in different brigades simultaneously.
 
-| Role | Who | Permissions summary |
-|---|---|---|
-| `DIRECTOR` | The user who created the brigade (auto-assigned) | Full control over the brigade |
-| `CO_DIRECTOR` | An existing registered user invited by the director | Same permissions as director within that brigade |
-| `STAFF` | Anyone added by the director (registered or not) | Register patients, operate queues, view dashboards |
+| Role          | Who                                                 | Permissions summary                                |
+| ------------- | --------------------------------------------------- | -------------------------------------------------- |
+| `DIRECTOR`    | The user who created the brigade (auto-assigned)    | Full control over the brigade                      |
+| `CO_DIRECTOR` | An existing registered user invited by the director | Same permissions as director within that brigade   |
+| `STAFF`       | Anyone added by the director (registered or not)    | Register patients, operate queues, view dashboards |
 
 ---
 
 ## Permission matrix
 
-| Action | Platform admin | Director (own brigade) | Co-director (own brigade) | Staff (own brigade) | Unauthenticated |
-|---|---|---|---|---|---|
-| Register as new user | — | ✅ open | ✅ open | — | ✅ |
-| Create brigade | — | ✅ | ✅ | ❌ | ❌ |
-| Edit brigade settings | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Open / close brigade | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Add / edit / delete areas | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Clone brigade or areas | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Invite staff (credentials or link) | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Edit / remove staff members | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Configure staff access after brigade closes | ✅ | ✅ | ✅ | ❌ | ❌ |
-| Register patients | ✅ | ✅ | ✅ | ✅ | ❌ |
-| Add patient to additional area | ✅ | ✅ | ✅ | ✅ | ❌ |
-| Operate queue (next, move, remove) | ✅ | ✅ | ✅ | ✅ | ❌ |
-| View area dashboard (authenticated) | ✅ | ✅ | ✅ | ✅ | ❌ |
-| View area dashboard (public mode) | ✅ | ✅ | ✅ | ✅ | ✅ (if enabled) |
-| View director overview | ✅ | ✅ | ✅ | ❌ | ❌ |
-| View closed brigade data | ✅ | ✅ | ✅ | Configurable | ❌ |
-| Access all brigades on platform | ✅ | ❌ | ❌ | ❌ | ❌ |
+| Action                                      | Platform admin | Director (own brigade) | Co-director (own brigade) | Staff (own brigade) | Unauthenticated |
+| ------------------------------------------- | -------------- | ---------------------- | ------------------------- | ------------------- | --------------- |
+| Register as new user                        | —              | ✅ open                | ✅ open                   | —                   | ✅              |
+| Create brigade                              | —              | ✅                     | ✅                        | ❌                  | ❌              |
+| Edit brigade settings                       | ✅             | ✅                     | ✅                        | ❌                  | ❌              |
+| Open / close brigade                        | ✅             | ✅                     | ✅                        | ❌                  | ❌              |
+| Add / edit / delete areas                   | ✅             | ✅                     | ✅                        | ❌                  | ❌              |
+| Clone brigade or areas                      | ✅             | ✅                     | ✅                        | ❌                  | ❌              |
+| Invite staff (credentials or link)          | ✅             | ✅                     | ✅                        | ❌                  | ❌              |
+| Edit / remove staff members                 | ✅             | ✅                     | ✅                        | ❌                  | ❌              |
+| Configure staff access after brigade closes | ✅             | ✅                     | ✅                        | ❌                  | ❌              |
+| Register patients                           | ✅             | ✅                     | ✅                        | ✅                  | ❌              |
+| Add patient to additional area              | ✅             | ✅                     | ✅                        | ✅                  | ❌              |
+| Operate queue (next, move, remove)          | ✅             | ✅                     | ✅                        | ✅                  | ❌              |
+| View area dashboard (authenticated)         | ✅             | ✅                     | ✅                        | ✅                  | ❌              |
+| View area dashboard (public mode)           | ✅             | ✅                     | ✅                        | ✅                  | ✅ (if enabled) |
+| View director overview                      | ✅             | ✅                     | ✅                        | ❌                  | ❌              |
+| View closed brigade data                    | ✅             | ✅                     | ✅                        | Configurable        | ❌              |
+| Access all brigades on platform             | ✅             | ❌                     | ❌                        | ❌                  | ❌              |
 
 ---
 
 ## Authentication flows
 
 ### 1. Director sign-up
+
 Any person can register as a brigade director. Two methods are available:
 
 ```
@@ -72,6 +73,7 @@ User visits /register
 ```
 
 ### 2. Director login
+
 ```
 User visits /login
     ├─ Email + password → Supabase validates → session cookie set →
@@ -82,6 +84,7 @@ User visits /login
 ```
 
 ### 3. Staff login — invite link (existing registered user)
+
 ```
 Director sends invite link: /invite/[token]
     │
@@ -97,6 +100,7 @@ User opens link
 ```
 
 ### 4. Staff login — generated credentials (non-registered staff)
+
 ```
 Director generates username + password from director panel →
 API creates brigade_members row (generatedUsername, generatedPasswordHash) →
@@ -112,6 +116,7 @@ redirect to brigade dashboard
 > Generated-credential sessions are brigade-scoped. Staff with generated credentials can only access the brigades they were added to. They do not have a `profiles` row until they choose to convert to a full account.
 
 ### 5. Public area dashboard (no login required)
+
 ```
 Director enables public mode for a brigade in brigade settings →
 System generates a public dashboard token per area →
@@ -154,10 +159,10 @@ Request → middleware.ts
 
 The director controls post-close access per staff member via a toggle in the brigade members panel. The setting is stored as `brigade_members.retainAccessAfterClose` (boolean, default `false`).
 
-| `retainAccessAfterClose` | Behavior after brigade closes |
-|---|---|
-| `false` (default) | Staff session is valid but API returns `403` on all brigade data requests |
-| `true` | Staff retains full read access to the closed brigade |
+| `retainAccessAfterClose` | Behavior after brigade closes                                             |
+| ------------------------ | ------------------------------------------------------------------------- |
+| `false` (default)        | Staff session is valid but API returns `403` on all brigade data requests |
+| `true`                   | Staff retains full read access to the closed brigade                      |
 
 Directors and co-directors always retain read access to closed brigades regardless of this setting.
 

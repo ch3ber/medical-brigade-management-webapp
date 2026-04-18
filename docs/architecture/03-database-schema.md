@@ -62,6 +62,7 @@ enum TurnoStatus {
 ## Table definitions
 
 ### `profiles`
+
 Extends `auth.users` with application-specific fields. Created automatically via a Supabase database trigger on `auth.users` insert.
 
 ```prisma
@@ -81,6 +82,7 @@ model Profile {
 ---
 
 ### `brigades`
+
 A single-day medical event. Fully isolated — all data under a brigade stays within that brigade.
 
 ```prisma
@@ -105,6 +107,7 @@ model Brigade {
 ```
 
 **Clone behavior:**
+
 - Cloning a brigade creates a new `Brigade` row with `status = DRAFT` and copies all `Area` rows (name, color, prefix, patientLimit) with fresh UUIDs. No patients, turnos, or members are copied.
 - Cloning individual areas copies only the selected `Area` rows into the target brigade.
 - Counters (`globalOrder`, `areaOrder`) always start at 1 in the new brigade regardless of source.
@@ -112,6 +115,7 @@ model Brigade {
 ---
 
 ### `areas`
+
 A medical station within a brigade. Configured by the director. Can be cloned from previous brigades.
 
 ```prisma
@@ -139,6 +143,7 @@ model Area {
 ---
 
 ### `brigade_members`
+
 Links a user profile (or a pending invite) to a brigade with a specific role. A user can be a member of multiple brigades with different roles in each.
 
 ```prisma
@@ -168,6 +173,7 @@ model BrigadeMember {
 ```
 
 **Two paths to join a brigade as staff:**
+
 1. **Generated credentials** — director creates a username + password from the director panel. `profileId` is linked on first login. `inviteToken` is null.
 2. **Invite link** — director sends an invite to an existing user's email. `inviteToken` is generated, emailed, and consumed on acceptance. `generatedUsername` is null.
 
@@ -176,6 +182,7 @@ model BrigadeMember {
 ---
 
 ### `patients`
+
 A person registered during an active brigade. Scoped entirely to one brigade.
 
 ```prisma
@@ -205,6 +212,7 @@ model Patient {
 ---
 
 ### `turnos`
+
 One record per patient per area visit. This table is the queue — there is no separate queue table.
 
 ```prisma
@@ -286,14 +294,14 @@ The lock is released automatically when the transaction commits or rolls back.
 
 Full migration SQL lives in `supabase/migrations/`. This table summarizes the intent.
 
-| Table | SELECT | INSERT | UPDATE | DELETE |
-|---|---|---|---|---|
-| `profiles` | Own row only | Via DB trigger on auth signup | Own row only | No |
-| `brigades` | Member of brigade OR platform admin | Any authenticated user | Director / co-director of brigade | Director only |
-| `areas` | Brigade member | Director / co-director | Director / co-director | Director only (if no turnos) |
-| `brigade_members` | Brigade member | Director of brigade | Director of brigade | Director of brigade |
-| `patients` | Brigade member | Brigade staff, co-director, or director | Brigade staff, co-director, or director | Director only |
-| `turnos` | Brigade member | Brigade staff, co-director, or director | Brigade staff, co-director, or director | Director only |
+| Table             | SELECT                              | INSERT                                  | UPDATE                                  | DELETE                       |
+| ----------------- | ----------------------------------- | --------------------------------------- | --------------------------------------- | ---------------------------- |
+| `profiles`        | Own row only                        | Via DB trigger on auth signup           | Own row only                            | No                           |
+| `brigades`        | Member of brigade OR platform admin | Any authenticated user                  | Director / co-director of brigade       | Director only                |
+| `areas`           | Brigade member                      | Director / co-director                  | Director / co-director                  | Director only (if no turnos) |
+| `brigade_members` | Brigade member                      | Director of brigade                     | Director of brigade                     | Director of brigade          |
+| `patients`        | Brigade member                      | Brigade staff, co-director, or director | Brigade staff, co-director, or director | Director only                |
+| `turnos`          | Brigade member                      | Brigade staff, co-director, or director | Brigade staff, co-director, or director | Director only                |
 
 **Closed brigades:** Members can still SELECT all rows. No INSERT, UPDATE, or DELETE is allowed on any table once `brigade.status = 'CLOSED'`. This is enforced in the API layer, not via RLS, to keep policies simple.
 
@@ -302,6 +310,7 @@ Full migration SQL lives in `supabase/migrations/`. This table summarizes the in
 ## Database triggers
 
 ### Auto-create profile on signup
+
 ```sql
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS trigger AS $$

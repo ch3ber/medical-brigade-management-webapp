@@ -17,11 +17,11 @@ GitHub (source of truth)
 
 ## Environments
 
-| Environment | Git branch | Vercel deployment | Supabase project |
-|---|---|---|---|
-| Local development | any | `localhost:3000` | Single Supabase project (dev data) |
-| Preview | `feature/*`, `develop` | Auto-generated URL per PR | Single Supabase project (dev data) |
-| Production | `main` | `your-domain.com` | Single Supabase project (prod data) |
+| Environment       | Git branch             | Vercel deployment         | Supabase project                    |
+| ----------------- | ---------------------- | ------------------------- | ----------------------------------- |
+| Local development | any                    | `localhost:3000`          | Single Supabase project (dev data)  |
+| Preview           | `feature/*`, `develop` | Auto-generated URL per PR | Single Supabase project (dev data)  |
+| Production        | `main`                 | `your-domain.com`         | Single Supabase project (prod data) |
 
 ### Single Supabase project
 
@@ -40,6 +40,7 @@ main          ← production. Only receives merges from develop via PR.
 ```
 
 **Rules:**
+
 - Direct commits to `main` are not allowed.
 - All merges to `main` require a passing GitHub Actions workflow.
 - Feature branches are created from `develop` and merged back into `develop`.
@@ -53,21 +54,21 @@ main          ← production. Only receives merges from develop via PR.
 
 Vercel detects Next.js automatically. No `vercel.json` needed. Configure the following in the Vercel dashboard:
 
-| Setting | Value |
-|---|---|
-| Framework preset | Next.js |
-| Root directory | `.` (project root) |
-| Build command | `bun run build` |
-| Install command | `bun install` |
+| Setting          | Value                   |
+| ---------------- | ----------------------- |
+| Framework preset | Next.js                 |
+| Root directory   | `.` (project root)      |
+| Build command    | `bun run build`         |
+| Install command  | `bun install`           |
 | Output directory | `.next` (auto-detected) |
 
 ### Branch deployments
 
-| Branch | Deployment type | URL |
-|---|---|---|
-| `main` | Production | `your-domain.com` |
-| `develop` | Preview | `develop.your-project.vercel.app` |
-| `feature/*` | Preview | Auto-generated per push |
+| Branch      | Deployment type | URL                               |
+| ----------- | --------------- | --------------------------------- |
+| `main`      | Production      | `your-domain.com`                 |
+| `develop`   | Preview         | `develop.your-project.vercel.app` |
+| `feature/*` | Preview         | Auto-generated per push           |
 
 Preview deployments are created automatically for every PR targeting `develop` or `main`. The preview URL is posted as a comment on the PR by Vercel's GitHub integration.
 
@@ -75,10 +76,10 @@ Preview deployments are created automatically for every PR targeting `develop` o
 
 All `app/api/v1/**` Route Handlers deploy as Vercel Serverless Functions.
 
-| Plan | Max duration | Notes |
-|---|---|---|
-| Hobby | 10 seconds | Sufficient for all queue operations |
-| Pro | 60 seconds | Recommended for production |
+| Plan  | Max duration | Notes                               |
+| ----- | ------------ | ----------------------------------- |
+| Hobby | 10 seconds   | Sufficient for all queue operations |
+| Pro   | 60 seconds   | Recommended for production          |
 
 Queue operations (advisory lock + transaction) complete well under 2 seconds under normal load. The 10-second limit on Hobby is not a concern for this project's scale.
 
@@ -261,16 +262,16 @@ jobs:
 
 Set these in **GitHub → Settings → Secrets and variables → Actions**:
 
-| Secret | Description |
-|---|---|
-| `DATABASE_URL` | Supabase pooler connection string |
-| `DIRECT_URL` | Supabase direct connection string |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key |
-| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key |
-| `VERCEL_TOKEN` | Vercel personal access token |
-| `VERCEL_ORG_ID` | Vercel organization ID |
-| `VERCEL_PROJECT_ID` | Vercel project ID |
+| Secret                          | Description                       |
+| ------------------------------- | --------------------------------- |
+| `DATABASE_URL`                  | Supabase pooler connection string |
+| `DIRECT_URL`                    | Supabase direct connection string |
+| `NEXT_PUBLIC_SUPABASE_URL`      | Supabase project URL              |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key                 |
+| `SUPABASE_SERVICE_ROLE_KEY`     | Supabase service role key         |
+| `VERCEL_TOKEN`                  | Vercel personal access token      |
+| `VERCEL_ORG_ID`                 | Vercel organization ID            |
+| `VERCEL_PROJECT_ID`             | Vercel project ID                 |
 
 ---
 
@@ -308,10 +309,10 @@ bun run dev
 
 ## Monitoring
 
-| Tool | What it covers | Plan |
-|---|---|---|
-| Vercel Analytics | Core web vitals, request latency, error rates | Included in Vercel |
-| Supabase Dashboard | Query performance, connection pool usage, Realtime stats, Auth logs | Included in Supabase |
-| Vercel Function Logs | Serverless function execution logs, errors | Included in Vercel |
+| Tool                 | What it covers                                                      | Plan                 |
+| -------------------- | ------------------------------------------------------------------- | -------------------- |
+| Vercel Analytics     | Core web vitals, request latency, error rates                       | Included in Vercel   |
+| Supabase Dashboard   | Query performance, connection pool usage, Realtime stats, Auth logs | Included in Supabase |
+| Vercel Function Logs | Serverless function execution logs, errors                          | Included in Vercel   |
 
 Sentry or a similar error tracking service is recommended for v2 when the app is in active production use.

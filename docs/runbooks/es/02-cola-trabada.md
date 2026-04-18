@@ -26,6 +26,7 @@ Muchas veces el problema es solo que la página perdió conexión. Recarga el da
 ### Paso 2 — Intenta la acción de nuevo
 
 Presiona el botón correspondiente con calma:
+
 - **"Atendido"** — si el paciente sí pasó a consulta.
 - **"Mover al final"** — si el paciente no estaba presente cuando se le llamó.
 - **"Eliminar"** — si el paciente ya no va a volver.
@@ -39,6 +40,7 @@ Espera 5 segundos antes de volver a intentar. A veces la conexión es lenta.
 Si después de recargar y reintentar el problema persiste, avisa al director de brigada inmediatamente. El director tiene acceso para resolver el turno desde su panel.
 
 **Información que el director necesita saber:**
+
 - El nombre del área afectada.
 - El número del turno que está trabado (ej. `D-12`).
 - El nombre del paciente si lo sabes.
