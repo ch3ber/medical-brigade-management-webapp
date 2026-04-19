@@ -53,12 +53,16 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ bri
     return err('VALIDACION_FALLIDA', 'Los datos enviados no son válidos.', 400, fields)
   }
 
+  if (!user.email) {
+    return err('SESION_REQUERIDA', 'La sesión ha expirado. Por favor inicia sesión nuevamente.', 401)
+  }
+
   try {
     const repo = new PrismaBrigadeRepository(prisma)
     const brigade = await new CloneBrigadeUseCase(repo).execute({
       brigadeId,
       userId: user.id,
-      creatorEmail: user.email ?? '',
+      creatorEmail: user.email,
       name: parsed.data.nombre,
       date: parsed.data.fecha,
     })

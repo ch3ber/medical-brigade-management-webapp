@@ -8,8 +8,11 @@ function ok<T>(data: T, status = 200) {
   return Response.json({ success: true, data, errors: null }, { status })
 }
 
-function err(code: string, message: string, status: number) {
-  return Response.json({ success: false, data: null, errors: { code, message } }, { status })
+function err(code: string, message: string, status: number, fields?: { field: string; message: string }[]) {
+  return Response.json(
+    { success: false, data: null, errors: { code, message, ...(fields ? { fields } : {}) } },
+    { status },
+  )
 }
 
 const ERROR_STATUS: Record<string, number> = {
