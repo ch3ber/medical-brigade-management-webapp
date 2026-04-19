@@ -37,7 +37,19 @@ describe('UpdateBrigadeUseCase', () => {
     ).rejects.toThrow('BRIGADA_NO_ENCONTRADA')
   })
 
-  it('throws BRIGADA_CERRADA when brigade is CLOSED', async () => {
+  it('throws SIN_PERMISO when role is STAFF regardless of brigade status', async () => {
+    const repo = makeMockRepo({
+      findById: vi.fn().mockResolvedValue(makeBrigade('CLOSED')),
+      getMemberRole: vi.fn().mockResolvedValue('STAFF'),
+    })
+    const useCase = new UpdateBrigadeUseCase(repo)
+
+    await expect(
+      useCase.execute({ brigadeId: 'brigade-1', userId: 'user-1', data: { name: 'New' } }),
+    ).rejects.toThrow('SIN_PERMISO')
+  })
+
+  it('throws BRIGADA_CERRADA when brigade is CLOSED and user is director', async () => {
     const repo = makeMockRepo({
       findById: vi.fn().mockResolvedValue(makeBrigade('CLOSED')),
       getMemberRole: vi.fn().mockResolvedValue('DIRECTOR'),

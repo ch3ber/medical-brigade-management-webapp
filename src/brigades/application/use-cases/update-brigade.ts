@@ -13,10 +13,11 @@ export class UpdateBrigadeUseCase {
   async execute({ brigadeId, userId, data }: UpdateBrigadeDto): Promise<Brigade> {
     const brigade = await this.repo.findById(brigadeId, userId)
     if (!brigade) throw new Error('BRIGADA_NO_ENCONTRADA')
-    if (!brigade.isEditable()) throw new Error('BRIGADA_CERRADA')
 
     const role = await this.repo.getMemberRole(brigadeId, userId)
     if (role !== 'DIRECTOR' && role !== 'CO_DIRECTOR') throw new Error('SIN_PERMISO')
+
+    if (!brigade.isEditable()) throw new Error('BRIGADA_CERRADA')
 
     return this.repo.update(brigadeId, data)
   }
