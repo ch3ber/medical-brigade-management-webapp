@@ -1,4 +1,5 @@
 import type { PrismaClient } from '@/shared/prisma/generated/client'
+import type { BrigadeStatus as PrismaBrigadeStatus } from '@/shared/prisma/generated/enums'
 import { Brigade } from '../domain/entities/Brigade'
 import type {
   IBrigadeRepository,
@@ -14,7 +15,7 @@ type PrismaRow = {
   description: string | null
   location: string
   date: Date
-  status: string
+  status: PrismaBrigadeStatus
   openedAt: Date | null
   closedAt: Date | null
   createdBy: string
@@ -28,7 +29,7 @@ function toDomain(row: PrismaRow): Brigade {
     description: row.description,
     location: row.location,
     date: row.date,
-    status: row.status as Brigade['status'],
+    status: row.status,
     openedAt: row.openedAt,
     closedAt: row.closedAt,
     createdBy: row.createdBy,
@@ -50,16 +51,17 @@ export class PrismaBrigadeRepository implements IBrigadeRepository {
   }
 
   async getMemberRole(brigadeId: string, userId: string): Promise<BrigadeRole | null> {
-    const profile = await this.prisma.profile.findUnique({
-      where: { id: userId },
-      select: { role: true },
-    })
+    const [profile, member] = await Promise.all([
+      this.prisma.profile.findUnique({
+        where: { id: userId },
+        select: { role: true },
+      }),
+      this.prisma.brigadeMember.findFirst({
+        where: { brigadeId, profileId: userId },
+        select: { role: true },
+      }),
+    ])
     if (profile?.role === AppRole.PLATFORM_ADMIN) return 'DIRECTOR'
-
-    const member = await this.prisma.brigadeMember.findFirst({
-      where: { brigadeId, profileId: userId },
-      select: { role: true },
-    })
     return (member?.role as BrigadeRole) ?? null
   }
 
@@ -86,7 +88,15 @@ export class PrismaBrigadeRepository implements IBrigadeRepository {
   async update(id: string, data: UpdateBrigadeData): Promise<Brigade> {
     const row = await this.prisma.brigade.update({
       where: { id },
-      data,
+      data: {
+        ...(data.name !== undefined && { name: data.name }),
+        ...(data.description !== undefined && { description: data.description }),
+        ...(data.location !== undefined && { location: data.location }),
+        ...(data.date !== undefined && { date: data.date }),
+        ...(data.status !== undefined && { status: data.status }),
+        ...(data.openedAt !== undefined && { openedAt: data.openedAt }),
+        ...(data.closedAt !== undefined && { closedAt: data.closedAt }),
+      },
     })
     return toDomain(row)
   }
