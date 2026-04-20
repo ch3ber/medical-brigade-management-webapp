@@ -192,7 +192,7 @@ export class Brigade {
 bun run test src/brigades/domain/entities/tests/unit/Brigade.test.ts
 ```
 
-Expected: PASS — 7 tests pass
+Expected: PASS — 9 tests pass
 
 - [ ] **Step 5: Commit**
 
