@@ -109,7 +109,7 @@ export class PrismaTurnoRepository implements ITurnoRepository {
 
       const llamadoEn = new Date()
       const updated = await tx.turno.update({
-        where: { id: turnoId },
+        where: { id: turnoId, status: TurnoStatus.WAITING },
         data: { status: TurnoStatus.CALLED, calledAt: llamadoEn },
         include: { area: { select: { prefix: true } }, patient: { select: { fullName: true, age: true } } },
       })
@@ -176,7 +176,7 @@ export class PrismaTurnoRepository implements ITurnoRepository {
   async remove(brigadeId: string, areaId: string, turnoId: string): Promise<RemoveResult> {
     return this.prisma.$transaction(async (tx) => {
       const removed = await tx.turno.update({
-        where: { id: turnoId },
+        where: { id: turnoId, status: TurnoStatus.CALLED },
         data: { status: TurnoStatus.REMOVED },
         include: { area: { select: { prefix: true } } },
       })
