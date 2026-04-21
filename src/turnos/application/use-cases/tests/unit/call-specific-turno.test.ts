@@ -39,6 +39,14 @@ describe('CallSpecificTurnoUseCase', () => {
     await expect(new CallSpecificTurnoUseCase(repo).execute(baseDto)).rejects.toThrow('BRIGADA_NO_ACTIVA')
   })
 
+  it('throws BRIGADA_NO_ACTIVA when brigade not found', async () => {
+    const repo = makeMockRepo({
+      getMemberRole: vi.fn().mockResolvedValue('STAFF'),
+      findBrigadeStatus: vi.fn().mockResolvedValue(null),
+    })
+    await expect(new CallSpecificTurnoUseCase(repo).execute(baseDto)).rejects.toThrow('BRIGADA_NO_ACTIVA')
+  })
+
   it('throws TURNO_NO_ENCONTRADO when turno not in WAITING status', async () => {
     const repo = makeMockRepo({
       getMemberRole: vi.fn().mockResolvedValue('STAFF'),
