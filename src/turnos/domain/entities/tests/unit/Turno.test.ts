@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest'
 import { Turno } from '@/src/turnos/domain/entities/Turno'
 
 const baseProps = {
@@ -6,7 +7,7 @@ const baseProps = {
   areaId: 'area-1',
   patientId: 'patient-1',
   areaOrder: 3,
-  status: 'WAITING',
+  status: 'WAITING' as const,
   calledAt: null,
   servedAt: null,
   movedCount: 0,
@@ -30,7 +31,7 @@ describe('Turno', () => {
   it('accepts non-null calledAt and servedAt', () => {
     const calledAt = new Date('2026-04-20T10:00:00Z')
     const servedAt = new Date('2026-04-20T10:05:00Z')
-    const turno = new Turno({ ...baseProps, calledAt, servedAt, status: 'SERVED' })
+    const turno = new Turno({ ...baseProps, calledAt, servedAt, status: 'SERVED' as const })
     expect(turno.calledAt).toBe(calledAt)
     expect(turno.servedAt).toBe(servedAt)
     expect(turno.status).toBe('SERVED')

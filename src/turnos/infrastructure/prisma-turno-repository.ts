@@ -141,6 +141,7 @@ export class PrismaTurnoRepository implements ITurnoRepository {
         include: { area: { select: { prefix: true } } },
       })
 
+      // The moved turno was CALLED, so the CALLED slot is now vacant — auto-promote next in queue.
       const next = await tx.turno.findFirst({
         where: { areaId, status: TurnoStatus.WAITING, id: { not: turnoId } },
         orderBy: { areaOrder: 'asc' },

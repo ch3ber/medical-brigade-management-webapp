@@ -1,10 +1,12 @@
+export type TurnoStatusValue = 'WAITING' | 'CALLED' | 'SERVED' | 'MOVED' | 'REMOVED'
+
 export interface TurnoProps {
   id: string
   brigadeId: string
   areaId: string
   patientId: string
   areaOrder: number
-  status: string
+  status: TurnoStatusValue
   calledAt: Date | null
   servedAt: Date | null
   movedCount: number
@@ -17,7 +19,7 @@ export class Turno {
   readonly areaId: string
   readonly patientId: string
   readonly areaOrder: number
-  readonly status: string
+  readonly status: TurnoStatusValue
   readonly calledAt: Date | null
   readonly servedAt: Date | null
   readonly movedCount: number
