@@ -105,6 +105,17 @@ export interface IMemberRepository {
 
 All use cases follow the constructor injection pattern: `constructor(private readonly repo: IMemberRepository)`.
 
+### `list-members.ts`
+
+```
+Input: { brigadeId, userId }
+
+1. getMemberRole(brigadeId, userId) → must be DIRECTOR or CO_DIRECTOR → else SIN_PERMISO
+2. repo.findAllByBrigade(brigadeId, userId)
+
+Output: BrigadeMember[]
+```
+
 ### `invite-member.ts`
 
 ```
@@ -259,11 +270,13 @@ domain/entities/BrigadeMember.ts
 domain/entities/tests/unit/BrigadeMember.test.ts
 domain/repositories/IMemberRepository.ts
 
+application/use-cases/list-members.ts
 application/use-cases/invite-member.ts
 application/use-cases/generate-staff-credentials.ts
 application/use-cases/accept-invite.ts
 application/use-cases/update-member-role.ts
 application/use-cases/remove-member.ts
+application/use-cases/tests/unit/list-members.test.ts
 application/use-cases/tests/unit/invite-member.test.ts
 application/use-cases/tests/unit/generate-staff-credentials.test.ts
 application/use-cases/tests/unit/accept-invite.test.ts
