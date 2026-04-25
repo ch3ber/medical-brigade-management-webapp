@@ -9,7 +9,7 @@ import { registerAction } from '../actions'
 const ERROR_MAP: Record<string, string> = {
   passwords_mismatch: 'Las contraseñas no coinciden',
   user_already_registered: 'Ya existe una cuenta con este correo',
-  weak_password: 'La contraseña debe tener al menos 6 caracteres',
+  weak_password: 'La contraseña debe tener al menos 8 caracteres',
   register_failed: 'Error al crear la cuenta. Inténtalo de nuevo',
 }
 
@@ -19,7 +19,7 @@ interface Props {
 
 export default async function RegisterPage({ searchParams }: Props) {
   const { error } = await searchParams
-  const displayError = error ? (ERROR_MAP[error] ?? ERROR_MAP.register_failed) : null
+  const displayError = error ? (ERROR_MAP[error] ?? null) : null
 
   return (
     <MobileShell>

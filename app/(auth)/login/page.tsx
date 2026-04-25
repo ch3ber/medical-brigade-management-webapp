@@ -23,7 +23,7 @@ interface Props {
 export default async function LoginPage({ searchParams }: Props) {
   const { error, message } = await searchParams
   const infoMessage = message ? (MESSAGE_MAP[message] ?? null) : null
-  const displayError = error ? (ERROR_MAP[error] ?? ERROR_MAP.login_failed) : null
+  const displayError = error ? (ERROR_MAP[error] ?? null) : null
 
   return (
     <MobileShell>

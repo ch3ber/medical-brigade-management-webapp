@@ -24,7 +24,7 @@ export async function loginAction(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword({ email, password })
 
   if (error) {
-    redirect(`/login?error=${loginErrorCode(error.message)}`)
+    redirect(`/login?error=${encodeURIComponent(loginErrorCode(error.message))}`)
   }
 
   redirect('/dashboard')
@@ -37,7 +37,7 @@ export async function registerAction(formData: FormData) {
   const confirmPassword = formData.get('confirmPassword') as string
 
   if (password !== confirmPassword) {
-    redirect('/register?error=passwords_mismatch')
+    redirect('/register?error=' + encodeURIComponent('passwords_mismatch'))
   }
 
   const supabase = await createSupabaseServerClient()
@@ -50,7 +50,7 @@ export async function registerAction(formData: FormData) {
   })
 
   if (error) {
-    redirect(`/register?error=${registerErrorCode(error.message)}`)
+    redirect(`/register?error=${encodeURIComponent(registerErrorCode(error.message))}`)
   }
 
   if (!data?.session) {
