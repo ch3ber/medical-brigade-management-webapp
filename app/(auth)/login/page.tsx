@@ -10,6 +10,12 @@ const MESSAGE_MAP: Record<string, string> = {
   email_confirmation_required: 'Revisa tu correo para confirmar tu cuenta',
 }
 
+const ERROR_MAP: Record<string, string> = {
+  invalid_credentials: 'Correo o contraseña incorrectos',
+  email_not_confirmed: 'Debes confirmar tu correo antes de ingresar',
+  login_failed: 'Error al ingresar. Inténtalo de nuevo',
+}
+
 interface Props {
   searchParams: Promise<{ error?: string; message?: string }>
 }
@@ -17,6 +23,7 @@ interface Props {
 export default async function LoginPage({ searchParams }: Props) {
   const { error, message } = await searchParams
   const infoMessage = message ? (MESSAGE_MAP[message] ?? null) : null
+  const displayError = error ? (ERROR_MAP[error] ?? ERROR_MAP.login_failed) : null
 
   return (
     <MobileShell>
@@ -36,9 +43,9 @@ export default async function LoginPage({ searchParams }: Props) {
           </div>
         )}
 
-        {error && (
+        {displayError && (
           <div className="mt-4 rounded-[var(--radius-md)] bg-red-50 px-4 py-3 text-sm text-red-600">
-            {error}
+            {displayError}
           </div>
         )}
 

@@ -3,6 +3,19 @@
 import { redirect } from 'next/navigation'
 import { createSupabaseServerClient } from '@/shared/supabase/server'
 
+function loginErrorCode(message: string): string {
+  if (message.includes('Invalid login credentials')) return 'invalid_credentials'
+  if (message.includes('Email not confirmed')) return 'email_not_confirmed'
+  return 'login_failed'
+}
+
+function registerErrorCode(message: string): string {
+  if (message.includes('User already registered')) return 'user_already_registered'
+  if (message.includes('Password should be at least')) return 'weak_password'
+  if (message.includes('valid password')) return 'weak_password'
+  return 'register_failed'
+}
+
 export async function loginAction(formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
@@ -11,7 +24,7 @@ export async function loginAction(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword({ email, password })
 
   if (error) {
-    redirect(`/login?error=${encodeURIComponent(error.message)}`)
+    redirect(`/login?error=${loginErrorCode(error.message)}`)
   }
 
   redirect('/dashboard')
@@ -24,7 +37,7 @@ export async function registerAction(formData: FormData) {
   const confirmPassword = formData.get('confirmPassword') as string
 
   if (password !== confirmPassword) {
-    redirect('/register?error=Las+contraseñas+no+coinciden')
+    redirect('/register?error=passwords_mismatch')
   }
 
   const supabase = await createSupabaseServerClient()
@@ -37,7 +50,7 @@ export async function registerAction(formData: FormData) {
   })
 
   if (error) {
-    redirect(`/register?error=${encodeURIComponent(error.message)}`)
+    redirect(`/register?error=${registerErrorCode(error.message)}`)
   }
 
   if (!data?.session) {

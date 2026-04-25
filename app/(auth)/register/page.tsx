@@ -6,12 +6,20 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { registerAction } from '../actions'
 
+const ERROR_MAP: Record<string, string> = {
+  passwords_mismatch: 'Las contraseñas no coinciden',
+  user_already_registered: 'Ya existe una cuenta con este correo',
+  weak_password: 'La contraseña debe tener al menos 6 caracteres',
+  register_failed: 'Error al crear la cuenta. Inténtalo de nuevo',
+}
+
 interface Props {
   searchParams: Promise<{ error?: string }>
 }
 
 export default async function RegisterPage({ searchParams }: Props) {
   const { error } = await searchParams
+  const displayError = error ? (ERROR_MAP[error] ?? ERROR_MAP.register_failed) : null
 
   return (
     <MobileShell>
@@ -25,9 +33,9 @@ export default async function RegisterPage({ searchParams }: Props) {
           <p className="text-sm text-[var(--muted)]">Crea una cuenta para gestionar tu brigada.</p>
         </div>
 
-        {error && (
+        {displayError && (
           <div className="mt-4 rounded-[var(--radius-md)] bg-red-50 px-4 py-3 text-sm text-red-600">
-            {error}
+            {displayError}
           </div>
         )}
 
