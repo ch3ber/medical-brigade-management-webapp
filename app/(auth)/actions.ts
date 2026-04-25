@@ -28,7 +28,7 @@ export async function registerAction(formData: FormData) {
   }
 
   const supabase = await createSupabaseServerClient()
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -38,6 +38,10 @@ export async function registerAction(formData: FormData) {
 
   if (error) {
     redirect(`/register?error=${encodeURIComponent(error.message)}`)
+  }
+
+  if (!data.session) {
+    redirect('/login?message=' + encodeURIComponent('Revisa tu correo para confirmar tu cuenta'))
   }
 
   redirect('/dashboard')

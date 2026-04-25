@@ -7,11 +7,11 @@ import { Input } from '@/components/ui/input'
 import { loginAction } from '../actions'
 
 interface Props {
-  searchParams: Promise<{ error?: string }>
+  searchParams: Promise<{ error?: string; message?: string }>
 }
 
 export default async function LoginPage({ searchParams }: Props) {
-  const { error } = await searchParams
+  const { error, message } = await searchParams
 
   return (
     <MobileShell>
@@ -24,6 +24,12 @@ export default async function LoginPage({ searchParams }: Props) {
           <h2 className="text-2xl font-bold">Bienvenido de nuevo</h2>
           <p className="text-sm text-[var(--muted)]">Ingresa para gestionar tu brigada.</p>
         </div>
+
+        {message && (
+          <div className="mt-4 rounded-[var(--radius-md)] bg-green-50 px-4 py-3 text-sm text-green-700">
+            {message}
+          </div>
+        )}
 
         {error && (
           <div className="mt-4 rounded-[var(--radius-md)] bg-red-50 px-4 py-3 text-sm text-red-600">
