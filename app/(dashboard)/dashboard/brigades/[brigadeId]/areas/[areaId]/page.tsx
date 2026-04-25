@@ -1,7 +1,10 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { AreaDashboard } from '@/src/turnos/infrastructure/components/AreaDashboard'
-import { mockAreas, mockTurnos, mockServed } from '@/shared/lib/mock-data'
+import { createSupabaseServerClient } from '@/shared/supabase/server'
+import { prisma } from '@/shared/prisma/client'
+import { PrismaTurnoRepository } from '@/src/turnos/infrastructure/prisma-turno-repository'
+import { GetAuthenticatedAreaQueueUseCase } from '@/src/turnos/application/use-cases/get-authenticated-area-queue'
 
 interface Props {
   params: Promise<{ brigadeId: string; areaId: string }>
@@ -9,25 +12,28 @@ interface Props {
 
 export default async function AreaQueuePage({ params }: Props) {
   const { brigadeId, areaId } = await params
-  const area = mockAreas.find((a) => a.id === areaId && a.brigadeId === brigadeId)
-  if (!area) notFound()
 
-  const called = mockTurnos.find((t) => t.status === 'CALLED')
-  const waiting = mockTurnos.filter((t) => t.status === 'WAITING')
+  const supabase = await createSupabaseServerClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const repo = new PrismaTurnoRepository(prisma)
+  const queue = await new GetAuthenticatedAreaQueueUseCase(repo)
+    .execute({ brigadeId, areaId, userId: user.id })
+    .catch(() => null)
+
+  if (!queue) notFound()
 
   return (
     <>
       <PageHeader
-        title={area.name}
+        title={queue.area.nombre}
         backHref={`/dashboard/brigades/${brigadeId}`}
       />
       <div className="px-5 pt-2 pb-4">
-        <AreaDashboard
-          areaName={area.name}
-          current={called}
-          waiting={waiting}
-          served={mockServed}
-        />
+        <AreaDashboard queue={queue} />
       </div>
     </>
   )
