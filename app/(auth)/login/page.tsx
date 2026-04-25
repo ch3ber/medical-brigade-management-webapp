@@ -6,12 +6,17 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { loginAction } from '../actions'
 
+const MESSAGE_MAP: Record<string, string> = {
+  email_confirmation_required: 'Revisa tu correo para confirmar tu cuenta',
+}
+
 interface Props {
   searchParams: Promise<{ error?: string; message?: string }>
 }
 
 export default async function LoginPage({ searchParams }: Props) {
   const { error, message } = await searchParams
+  const infoMessage = message ? (MESSAGE_MAP[message] ?? null) : null
 
   return (
     <MobileShell>
@@ -25,9 +30,9 @@ export default async function LoginPage({ searchParams }: Props) {
           <p className="text-sm text-[var(--muted)]">Ingresa para gestionar tu brigada.</p>
         </div>
 
-        {message && (
+        {infoMessage && (
           <div className="mt-4 rounded-[var(--radius-md)] bg-green-50 px-4 py-3 text-sm text-green-700">
-            {message}
+            {infoMessage}
           </div>
         )}
 

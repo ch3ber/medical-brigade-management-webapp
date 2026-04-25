@@ -40,8 +40,8 @@ export async function registerAction(formData: FormData) {
     redirect(`/register?error=${encodeURIComponent(error.message)}`)
   }
 
-  if (!data.session) {
-    redirect('/login?message=' + encodeURIComponent('Revisa tu correo para confirmar tu cuenta'))
+  if (!data?.session) {
+    redirect('/login?message=email_confirmation_required')
   }
 
   redirect('/dashboard')
