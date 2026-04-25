@@ -1,6 +1,6 @@
 import type { PrismaClient } from '@/shared/prisma/generated/client'
 import type { BrigadeStatus as PrismaBrigadeStatus } from '@/shared/prisma/generated/enums'
-import { Brigade } from '../domain/entities/Brigade'
+import { Brigade, BrigadeWithCounts } from '../domain/entities/Brigade'
 import type {
   IBrigadeRepository,
   BrigadeRole,
@@ -22,8 +22,8 @@ type PrismaRow = {
   createdAt: Date
 }
 
-function toDomain(row: PrismaRow): Brigade {
-  return new Brigade({
+function toDomainProps(row: PrismaRow) {
+  return {
     id: row.id,
     name: row.name,
     description: row.description,
@@ -34,7 +34,11 @@ function toDomain(row: PrismaRow): Brigade {
     closedAt: row.closedAt,
     createdBy: row.createdBy,
     createdAt: row.createdAt,
-  })
+  }
+}
+
+function toDomain(row: PrismaRow): Brigade {
+  return new Brigade(toDomainProps(row))
 }
 
 export class PrismaBrigadeRepository implements IBrigadeRepository {
@@ -48,6 +52,32 @@ export class PrismaBrigadeRepository implements IBrigadeRepository {
       },
     })
     return row ? toDomain(row) : null
+  }
+
+  async findAllByUserId(userId: string): Promise<BrigadeWithCounts[]> {
+    const rows = await this.prisma.brigade.findMany({
+      where: {
+        members: { some: { profileId: userId } },
+      },
+      orderBy: { createdAt: 'desc' },
+      include: {
+        _count: {
+          select: {
+            patients: true,
+            areas: { where: { isActive: true } },
+          },
+        },
+      },
+    })
+
+    return rows.map(
+      (row) =>
+        new BrigadeWithCounts({
+          ...toDomainProps(row),
+          patientsCount: row._count.patients,
+          areasCount: row._count.areas,
+        }),
+    )
   }
 
   async getMemberRole(brigadeId: string, userId: string): Promise<BrigadeRole | null> {

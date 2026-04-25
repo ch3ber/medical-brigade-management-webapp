@@ -1,4 +1,4 @@
-import type { Brigade, BrigadeStatus } from '../entities/Brigade'
+import type { Brigade, BrigadeWithCounts, BrigadeStatus } from '../entities/Brigade'
 
 export type BrigadeRole = 'DIRECTOR' | 'CO_DIRECTOR' | 'STAFF'
 
@@ -23,6 +23,7 @@ export interface UpdateBrigadeData {
 
 export interface IBrigadeRepository {
   findById(id: string, userId: string): Promise<Brigade | null>
+  findAllByUserId(userId: string): Promise<BrigadeWithCounts[]>
   getMemberRole(brigadeId: string, userId: string): Promise<BrigadeRole | null>
   create(data: CreateBrigadeData): Promise<Brigade>
   update(id: string, data: UpdateBrigadeData): Promise<Brigade>

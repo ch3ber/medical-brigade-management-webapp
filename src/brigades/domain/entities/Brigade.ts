@@ -50,3 +50,19 @@ export class Brigade {
     return this.status !== 'CLOSED'
   }
 }
+
+export interface BrigadeWithCountsProps extends BrigadeProps {
+  patientsCount: number
+  areasCount: number
+}
+
+export class BrigadeWithCounts extends Brigade {
+  readonly patientsCount: number
+  readonly areasCount: number
+
+  constructor(props: BrigadeWithCountsProps) {
+    super(props)
+    this.patientsCount = props.patientsCount
+    this.areasCount = props.areasCount
+  }
+}
