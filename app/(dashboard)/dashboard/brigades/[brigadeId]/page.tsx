@@ -1,12 +1,17 @@
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { Heart, Share2, MapPin, Calendar, Users, Plus, UserPlus, Settings } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { BrigadeStatusBadge } from '@/src/brigades/infrastructure/components/BrigadeStatusBadge'
 import { AreaCard } from '@/src/areas/infrastructure/components/AreaCard'
-import { mockBrigades, mockAreas } from '@/shared/lib/mock-data'
+import { createSupabaseServerClient } from '@/shared/supabase/server'
+import { prisma } from '@/shared/prisma/client'
+import { PrismaBrigadeRepository } from '@/src/brigades/infrastructure/prisma-brigade-repository'
+import { PrismaAreaRepository } from '@/src/areas/infrastructure/prisma-area-repository'
+import { GetBrigadeUseCase } from '@/src/brigades/application/use-cases/get-brigade'
+import { ListAreasUseCase } from '@/src/areas/application/use-cases/list-areas'
 
 interface Props {
   params: Promise<{ brigadeId: string }>
@@ -14,10 +19,24 @@ interface Props {
 
 export default async function BrigadeDetailPage({ params }: Props) {
   const { brigadeId } = await params
-  const brigade = mockBrigades.find((b) => b.id === brigadeId)
+
+  const supabase = await createSupabaseServerClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const brigadeRepo = new PrismaBrigadeRepository(prisma)
+  const areaRepo = new PrismaAreaRepository(prisma)
+
+  const [brigade, areas] = await Promise.all([
+    new GetBrigadeUseCase(brigadeRepo).execute({ brigadeId, userId: user.id }).catch(() => null),
+    new ListAreasUseCase(areaRepo).execute({ brigadeId, userId: user.id }),
+  ])
+
   if (!brigade) notFound()
-  const areas = mockAreas.filter((a) => a.brigadeId === brigadeId)
-  const totalWaiting = areas.reduce((acc, a) => acc + a.waitingCount, 0)
+
+  const totalWaiting = areas.reduce((acc, a) => acc + a.totalEnEspera, 0)
 
   return (
     <>
@@ -56,7 +75,11 @@ export default async function BrigadeDetailPage({ params }: Props) {
               </span>
               <span className="inline-flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
-                {brigade.date}
+                {brigade.date.toLocaleDateString('es-MX', {
+                  day: '2-digit',
+                  month: 'short',
+                  year: 'numeric',
+                })}
               </span>
             </div>
           </div>
@@ -65,18 +88,18 @@ export default async function BrigadeDetailPage({ params }: Props) {
 
       <section className="grid grid-cols-3 gap-2 px-5 pt-4">
         <StatTile
-          label="Pacientes"
-          value={brigade.patientsCount}
-          icon={<Users className="h-3 w-3" />}
-        />
-        <StatTile
           label="Áreas"
-          value={brigade.areasCount}
+          value={areas.length}
           icon={<Calendar className="h-3 w-3" />}
         />
         <StatTile
           label="Esperando"
           value={totalWaiting}
+          icon={<Users className="h-3 w-3" />}
+        />
+        <StatTile
+          label="Atendidos"
+          value={areas.reduce((acc, a) => acc + a.totalAtendidos, 0)}
           icon={<Users className="h-3 w-3" />}
         />
       </section>
@@ -119,9 +142,18 @@ export default async function BrigadeDetailPage({ params }: Props) {
           {areas.map((a) => (
             <AreaCard
               key={a.id}
-              {...a}
+              brigadeId={a.brigadeId}
+              id={a.id}
+              name={a.name}
+              prefix={a.prefix}
+              color={a.color}
+              waitingCount={a.totalEnEspera}
+              servedCount={a.totalAtendidos}
             />
           ))}
+          {areas.length === 0 && (
+            <p className="py-4 text-center text-sm text-[var(--muted)]">No hay áreas configuradas.</p>
+          )}
         </div>
       </section>
     </>
