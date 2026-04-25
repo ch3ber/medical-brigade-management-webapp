@@ -10,6 +10,7 @@ import type {
   MoveResult,
   RemoveResult,
   PublicAreaQueue,
+  AuthenticatedAreaQueue,
 } from '../domain/repositories/ITurnoRepository'
 
 export class PrismaTurnoRepository implements ITurnoRepository {
@@ -236,6 +237,62 @@ export class PrismaTurnoRepository implements ITurnoRepository {
       area: { nombre: area.name, prefijo: area.prefix, color: area.color },
       turnoActual: called ? { label: `${area.prefix}-${called.areaOrder}` } : null,
       enEspera: waiting.map((t) => ({ label: `${area.prefix}-${t.areaOrder}` })),
+    }
+  }
+
+  async getAuthenticatedAreaQueue(
+    brigadeId: string,
+    areaId: string,
+    userId: string,
+  ): Promise<AuthenticatedAreaQueue | null> {
+    const role = await this.getMemberRole(brigadeId, userId)
+    if (!role) return null
+
+    const area = await this.prisma.area.findFirst({
+      where: { id: areaId, brigadeId },
+      select: { id: true, name: true, prefix: true, color: true },
+    })
+    if (!area) return null
+
+    const [called, waiting, served] = await Promise.all([
+      this.prisma.turno.findFirst({
+        where: { areaId, brigadeId, status: TurnoStatus.CALLED },
+        include: { patient: { select: { fullName: true, age: true } } },
+      }),
+      this.prisma.turno.findMany({
+        where: { areaId, brigadeId, status: TurnoStatus.WAITING },
+        orderBy: { areaOrder: 'asc' },
+        include: { patient: { select: { fullName: true, age: true } } },
+      }),
+      this.prisma.turno.findMany({
+        where: { areaId, brigadeId, status: TurnoStatus.SERVED },
+        orderBy: { updatedAt: 'desc' },
+        take: 10,
+        include: { patient: { select: { fullName: true } } },
+      }),
+    ])
+
+    return {
+      area: { id: area.id, nombre: area.name, prefijo: area.prefix, color: area.color },
+      turnoActual: called
+        ? {
+            id: called.id,
+            label: `${area.prefix}-${called.areaOrder}`,
+            patientName: called.patient.fullName,
+            age: called.patient.age,
+          }
+        : null,
+      enEspera: waiting.map((t) => ({
+        id: t.id,
+        label: `${area.prefix}-${t.areaOrder}`,
+        patientName: t.patient.fullName,
+        age: t.patient.age,
+      })),
+      atendidos: served.map((t) => ({
+        id: t.id,
+        label: `${area.prefix}-${t.areaOrder}`,
+        patientName: t.patient.fullName,
+      })),
     }
   }
 }

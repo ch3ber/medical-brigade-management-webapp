@@ -42,6 +42,33 @@ export interface PublicAreaQueue {
   enEspera: { label: string }[]
 }
 
+export interface AuthQueueCalledTurno {
+  id: string
+  label: string
+  patientName: string
+  age: number
+}
+
+export interface AuthQueueWaitingTurno {
+  id: string
+  label: string
+  patientName: string
+  age: number
+}
+
+export interface AuthQueueServedTurno {
+  id: string
+  label: string
+  patientName: string
+}
+
+export interface AuthenticatedAreaQueue {
+  area: { id: string; nombre: string; prefijo: string; color: string }
+  turnoActual: AuthQueueCalledTurno | null
+  enEspera: AuthQueueWaitingTurno[]
+  atendidos: AuthQueueServedTurno[]
+}
+
 export interface ITurnoRepository {
   getMemberRole(brigadeId: string, userId: string): Promise<BrigadeRole | null>
   findBrigadeStatus(brigadeId: string, userId: string): Promise<{ status: string } | null>
@@ -52,4 +79,9 @@ export interface ITurnoRepository {
   moveToTail(brigadeId: string, areaId: string, turnoId: string): Promise<MoveResult>
   remove(brigadeId: string, areaId: string, turnoId: string): Promise<RemoveResult>
   getPublicAreaQueue(brigadeId: string, areaId: string, token: string): Promise<PublicAreaQueue | null>
+  getAuthenticatedAreaQueue(
+    brigadeId: string,
+    areaId: string,
+    userId: string,
+  ): Promise<AuthenticatedAreaQueue | null>
 }
