@@ -1,3 +1,6 @@
+'use client'
+
+import { useState, useTransition } from 'react'
 import { PhoneCall, SkipForward, XCircle } from 'lucide-react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -7,12 +10,34 @@ export interface CurrentTurnoDisplayProps {
   label?: string
   patientName?: string
   age?: number
-  onCallNext?: () => void
-  onMove?: () => void
-  onRemove?: () => void
+  onCallNext?: () => Promise<void>
+  onMove?: () => Promise<void>
+  onRemove?: () => Promise<void>
 }
 
-export function CurrentTurnoDisplay({ label, patientName, age }: CurrentTurnoDisplayProps) {
+export function CurrentTurnoDisplay({
+  label,
+  patientName,
+  age,
+  onCallNext,
+  onMove,
+  onRemove,
+}: CurrentTurnoDisplayProps) {
+  const [pending, setPending] = useState<'callNext' | 'move' | 'remove' | null>(null)
+  const [, startTransition] = useTransition()
+
+  const handle = (key: 'callNext' | 'move' | 'remove', action?: () => Promise<void>) => {
+    if (!action || pending) return
+    setPending(key)
+    startTransition(async () => {
+      try {
+        await action()
+      } finally {
+        setPending(null)
+      }
+    })
+  }
+
   if (!label) {
     return (
       <Card className="p-6 text-center">
@@ -20,13 +45,16 @@ export function CurrentTurnoDisplay({ label, patientName, age }: CurrentTurnoDis
         <Button
           size="md"
           className="mt-4"
+          disabled={pending === 'callNext'}
+          onClick={() => handle('callNext', onCallNext)}
         >
           <PhoneCall className="h-4 w-4" />
-          Llamar siguiente
+          {pending === 'callNext' ? 'Llamando…' : 'Llamar siguiente'}
         </Button>
       </Card>
     )
   }
+
   return (
     <Card className="relative overflow-hidden border-0 p-0 text-white">
       <div className="bg-brand-gradient absolute inset-0" />
@@ -52,25 +80,31 @@ export function CurrentTurnoDisplay({ label, patientName, age }: CurrentTurnoDis
             variant="secondary"
             size="md"
             className="w-full border-0 bg-white text-[var(--accent)]"
+            disabled={!!pending}
+            onClick={() => handle('callNext', onCallNext)}
           >
             <PhoneCall className="h-4 w-4" />
-            Siguiente
+            {pending === 'callNext' ? '…' : 'Siguiente'}
           </Button>
           <Button
             variant="secondary"
             size="md"
             className="w-full border-0 bg-white/15 text-white backdrop-blur hover:bg-white/25"
+            disabled={!!pending}
+            onClick={() => handle('move', onMove)}
           >
             <SkipForward className="h-4 w-4" />
-            Mover
+            {pending === 'move' ? '…' : 'Mover'}
           </Button>
           <Button
             variant="destructive"
             size="md"
             className="w-full"
+            disabled={!!pending}
+            onClick={() => handle('remove', onRemove)}
           >
             <XCircle className="h-4 w-4" />
-            Retirar
+            {pending === 'remove' ? '…' : 'Retirar'}
           </Button>
         </div>
       </div>

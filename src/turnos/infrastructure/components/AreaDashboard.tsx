@@ -7,9 +7,12 @@ export type { AuthenticatedAreaQueue }
 
 interface AreaDashboardProps {
   queue: AuthenticatedAreaQueue
+  onCallNext: () => Promise<void>
+  onMove: () => Promise<void>
+  onRemove: () => Promise<void>
 }
 
-export function AreaDashboard({ queue }: AreaDashboardProps) {
+export function AreaDashboard({ queue, onCallNext, onMove, onRemove }: AreaDashboardProps) {
   return (
     <div className="space-y-5">
       <div>
@@ -20,6 +23,9 @@ export function AreaDashboard({ queue }: AreaDashboardProps) {
         label={queue.turnoActual?.label}
         patientName={queue.turnoActual?.patientName}
         age={queue.turnoActual?.age}
+        onCallNext={onCallNext}
+        onMove={onMove}
+        onRemove={onRemove}
       />
       <section>
         <div className="mb-2 flex items-center justify-between">

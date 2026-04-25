@@ -5,6 +5,7 @@ import { createSupabaseServerClient } from '@/shared/supabase/server'
 import { prisma } from '@/shared/prisma/client'
 import { PrismaTurnoRepository } from '@/src/turnos/infrastructure/prisma-turno-repository'
 import { GetAuthenticatedAreaQueueUseCase } from '@/src/turnos/application/use-cases/get-authenticated-area-queue'
+import { callNextAction, moveTurnoAction, removeTurnoAction } from './actions'
 
 interface Props {
   params: Promise<{ brigadeId: string; areaId: string }>
@@ -26,6 +27,11 @@ export default async function AreaQueuePage({ params }: Props) {
 
   if (!queue) notFound()
 
+  const currentTurnoId = queue.turnoActual?.id ?? ''
+  const onCallNext = callNextAction.bind(null, brigadeId, areaId)
+  const onMove = moveTurnoAction.bind(null, brigadeId, areaId, currentTurnoId)
+  const onRemove = removeTurnoAction.bind(null, brigadeId, areaId, currentTurnoId)
+
   return (
     <>
       <PageHeader
@@ -33,7 +39,12 @@ export default async function AreaQueuePage({ params }: Props) {
         backHref={`/dashboard/brigades/${brigadeId}`}
       />
       <div className="px-5 pt-2 pb-4">
-        <AreaDashboard queue={queue} />
+        <AreaDashboard
+          queue={queue}
+          onCallNext={onCallNext}
+          onMove={onMove}
+          onRemove={onRemove}
+        />
       </div>
     </>
   )
