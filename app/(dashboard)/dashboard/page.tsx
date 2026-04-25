@@ -1,12 +1,15 @@
 import Link from 'next/link'
-import { Search, Plus, ArrowUpRight, Stethoscope, Baby, Pill, Heart, Cross } from 'lucide-react'
+import { redirect } from 'next/navigation'
+import { Plus, ArrowUpRight, Stethoscope, Baby, Pill, Heart, Cross } from 'lucide-react'
 import { TopGreeting } from '@/components/layout/TopGreeting'
-import { Input } from '@/components/ui/input'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { BrigadeCard } from '@/src/brigades/infrastructure/components/BrigadeCard'
-import { mockBrigades } from '@/shared/lib/mock-data'
+import { createSupabaseServerClient } from '@/shared/supabase/server'
+import { prisma } from '@/shared/prisma/client'
+import { PrismaBrigadeRepository } from '@/src/brigades/infrastructure/prisma-brigade-repository'
+import { ListBrigadesUseCase } from '@/src/brigades/application/use-cases/list-brigades'
 
 const specialties = [
   { label: 'General', icon: Stethoscope, color: '#4b6bfb' },
@@ -16,26 +19,29 @@ const specialties = [
   { label: 'Cardio', icon: Heart, color: '#ef4444' },
 ]
 
-export default function DashboardHomePage() {
-  const active = mockBrigades.find((b) => b.status === 'ACTIVE')
-  const others = mockBrigades.filter((b) => b.id !== active?.id)
+export default async function DashboardHomePage() {
+  const supabase = await createSupabaseServerClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const [brigades, profile] = await Promise.all([
+    new ListBrigadesUseCase(new PrismaBrigadeRepository(prisma)).execute({ userId: user.id }),
+    prisma.profile.findUnique({ where: { id: user.id }, select: { fullName: true } }),
+  ])
+
+  const active = brigades.find((b) => b.status === 'ACTIVE')
+  const others = brigades.filter((b) => b.id !== active?.id)
+
+  const firstName = profile?.fullName?.split(' ')[0] ?? 'Usuario'
 
   return (
     <>
       <TopGreeting
-        name="Eber"
+        name={firstName}
         subtitle="¿Listo para la brigada de hoy?"
       />
-
-      <div className="px-5 pt-5">
-        <div className="relative">
-          <Search className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
-          <Input
-            placeholder="Buscar brigadas o pacientes"
-            className="pl-11"
-          />
-        </div>
-      </div>
 
       <section className="px-5 pt-5">
         <div className="no-scrollbar flex gap-4 overflow-x-auto">
@@ -74,7 +80,12 @@ export default function DashboardHomePage() {
               </div>
               <h2 className="mt-4 text-xl font-bold">{active.name}</h2>
               <p className="mt-1 text-sm text-white/80">
-                {active.location} · {active.date}
+                {active.location} ·{' '}
+                {active.date.toLocaleDateString('es-MX', {
+                  day: '2-digit',
+                  month: 'short',
+                  year: 'numeric',
+                })}
               </p>
               <div className="mt-5 grid grid-cols-2 gap-2">
                 <div className="rounded-[var(--radius-md)] bg-white/15 px-3 py-2 backdrop-blur">
@@ -118,9 +129,16 @@ export default function DashboardHomePage() {
           {others.map((b) => (
             <BrigadeCard
               key={b.id}
-              {...b}
+              id={b.id}
+              name={b.name}
+              location={b.location}
+              date={b.date.toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' })}
+              status={b.status}
+              patientsCount={b.patientsCount}
+              areasCount={b.areasCount}
             />
           ))}
+          {others.length === 0 && <p className="text-sm text-[var(--muted)]">No hay brigadas recientes.</p>}
         </div>
       </section>
     </>
