@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { cn } from '@/shared/lib/cn'
+import { createBrigadeAction } from '../actions'
 
 const COLORS = ['#4b6bfb', '#16a34a', '#f59e0b', '#8b5cf6', '#ef4444', '#0ea5e9', '#ec4899', '#14b8a6']
 
@@ -19,18 +20,13 @@ interface AreaDraft {
 
 export default function NewBrigadePage() {
   const [areas, setAreas] = useState<AreaDraft[]>([
-    { id: '1', name: 'General Medicine', prefix: 'GM', color: '#4b6bfb' },
+    { id: '1', name: 'Medicina General', prefix: 'MG', color: '#4b6bfb' },
   ])
 
   const addArea = () =>
     setAreas((prev) => [
       ...prev,
-      {
-        id: String(Date.now()),
-        name: '',
-        prefix: '',
-        color: COLORS[prev.length % COLORS.length],
-      },
+      { id: String(Date.now()), name: '', prefix: '', color: COLORS[prev.length % COLORS.length] },
     ])
 
   const removeArea = (id: string) => setAreas((prev) => prev.filter((a) => a.id !== id))
@@ -44,12 +40,22 @@ export default function NewBrigadePage() {
         title="Nueva brigada"
         backHref="/dashboard/brigades"
       />
-      <div className="space-y-5 px-5 pt-2 pb-4">
+      <form
+        action={createBrigadeAction}
+        className="space-y-5 px-5 pt-2 pb-4"
+      >
+        <input
+          type="hidden"
+          name="areas"
+          value={JSON.stringify(areas)}
+        />
+
         <Field
           icon={<FileText className="h-4 w-4" />}
           label="Nombre de la brigada"
         >
           <Input
+            name="name"
             placeholder="Brigada San Miguel"
             required
           />
@@ -59,14 +65,22 @@ export default function NewBrigadePage() {
           icon={<MapPin className="h-4 w-4" />}
           label="Lugar"
         >
-          <Input placeholder="Parroquia San Miguel" />
+          <Input
+            name="location"
+            placeholder="Parroquia San Miguel"
+            required
+          />
         </Field>
 
         <Field
           icon={<Calendar className="h-4 w-4" />}
           label="Fecha"
         >
-          <Input type="date" />
+          <Input
+            type="date"
+            name="date"
+            required
+          />
         </Field>
 
         <section>
@@ -90,9 +104,8 @@ export default function NewBrigadePage() {
               >
                 <div className="flex items-center gap-3">
                   <div
-                    className="h-10 w-10 shrink-0 cursor-pointer rounded-[var(--radius-md)] shadow ring-2 ring-white"
+                    className="h-10 w-10 shrink-0 rounded-[var(--radius-md)] shadow ring-2 ring-white"
                     style={{ background: area.color }}
-                    title="Elegir color"
                   />
                   <div className="grid flex-1 grid-cols-2 gap-2">
                     <Input
@@ -102,7 +115,7 @@ export default function NewBrigadePage() {
                       className="h-10 text-sm"
                     />
                     <Input
-                      placeholder="Prefijo (GM)"
+                      placeholder="Prefijo (MG)"
                       value={area.prefix}
                       maxLength={4}
                       onChange={(e) => updateArea(area.id, 'prefix', e.target.value.toUpperCase())}
@@ -149,7 +162,7 @@ export default function NewBrigadePage() {
         >
           Crear brigada
         </Button>
-      </div>
+      </form>
     </>
   )
 }
