@@ -7,6 +7,7 @@ export interface BrigadeMemberProps {
   email: string
   role: BrigadeRole
   generatedUsername: string | null
+  generatedPasswordHash: string | null
   inviteToken: string | null
   invitedAt: Date
   acceptedAt: Date | null
@@ -22,6 +23,7 @@ export class BrigadeMember {
   readonly email: string
   readonly role: BrigadeRole
   readonly generatedUsername: string | null
+  readonly generatedPasswordHash: string | null
   readonly inviteToken: string | null
   readonly invitedAt: Date
   readonly acceptedAt: Date | null
@@ -36,6 +38,7 @@ export class BrigadeMember {
     this.email = props.email
     this.role = props.role
     this.generatedUsername = props.generatedUsername
+    this.generatedPasswordHash = props.generatedPasswordHash
     this.inviteToken = props.inviteToken
     this.invitedAt = props.invitedAt
     this.acceptedAt = props.acceptedAt

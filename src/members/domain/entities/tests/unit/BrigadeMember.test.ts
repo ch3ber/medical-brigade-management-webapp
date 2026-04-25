@@ -8,6 +8,7 @@ const base: BrigadeMemberProps = {
   email: 'staff@example.com',
   role: 'STAFF',
   generatedUsername: null,
+  generatedPasswordHash: null,
   inviteToken: null,
   invitedAt: new Date('2026-01-01'),
   acceptedAt: new Date('2026-01-02'),
