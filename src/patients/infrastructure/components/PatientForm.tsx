@@ -14,19 +14,35 @@ export interface PatientFormAreaOption {
   color: string
 }
 
-export function PatientForm({ areas }: { areas: PatientFormAreaOption[] }) {
+interface PatientFormProps {
+  areas: PatientFormAreaOption[]
+  action: (formData: FormData) => Promise<void>
+}
+
+export function PatientForm({ areas, action }: PatientFormProps) {
   const [selected, setSelected] = useState<string[]>([])
 
   const toggle = (id: string) =>
     setSelected((cur) => (cur.includes(id) ? cur.filter((x) => x !== id) : [...cur, id]))
 
+  const handleSubmit = async (formData: FormData) => {
+    for (const id of selected) {
+      formData.append('areaIds', id)
+    }
+    await action(formData)
+  }
+
   return (
-    <form className="space-y-5">
+    <form
+      action={handleSubmit}
+      className="space-y-5"
+    >
       <Field
         icon={<User className="h-4 w-4" />}
         label="Nombre completo"
       >
         <Input
+          name="fullName"
           placeholder="María López"
           required
         />
@@ -38,6 +54,7 @@ export function PatientForm({ areas }: { areas: PatientFormAreaOption[] }) {
           label="Edad"
         >
           <Input
+            name="age"
             type="number"
             placeholder="42"
             required
@@ -50,6 +67,7 @@ export function PatientForm({ areas }: { areas: PatientFormAreaOption[] }) {
           label="Teléfono"
         >
           <Input
+            name="phone"
             type="tel"
             placeholder="+503 0000 0000"
           />
