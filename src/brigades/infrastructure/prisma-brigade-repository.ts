@@ -1,6 +1,7 @@
 import type { PrismaClient } from '@/shared/prisma/generated/client'
 import type { BrigadeStatus as PrismaBrigadeStatus } from '@/shared/prisma/generated/enums'
 import { Brigade, BrigadeWithCounts } from '../domain/entities/Brigade'
+import type { BrigadeProps } from '../domain/entities/Brigade'
 import type {
   IBrigadeRepository,
   BrigadeRole,
@@ -22,7 +23,7 @@ type PrismaRow = {
   createdAt: Date
 }
 
-function toDomainProps(row: PrismaRow) {
+function toDomainProps(row: PrismaRow): BrigadeProps {
   return {
     id: row.id,
     name: row.name,
