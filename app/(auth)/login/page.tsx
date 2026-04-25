@@ -4,8 +4,15 @@ import { MobileShell } from '@/components/layout/MobileShell'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { loginAction } from '../actions'
 
-export default function LoginPage() {
+interface Props {
+  searchParams: Promise<{ error?: string }>
+}
+
+export default async function LoginPage({ searchParams }: Props) {
+  const { error } = await searchParams
+
   return (
     <MobileShell>
       <PageHeader
@@ -18,13 +25,23 @@ export default function LoginPage() {
           <p className="text-sm text-[var(--muted)]">Ingresa para gestionar tu brigada.</p>
         </div>
 
-        <form className="mt-10 space-y-4">
+        {error && (
+          <div className="mt-4 rounded-[var(--radius-md)] bg-red-50 px-4 py-3 text-sm text-red-600">
+            {error}
+          </div>
+        )}
+
+        <form
+          action={loginAction}
+          className="mt-10 space-y-4"
+        >
           <label className="block">
             <span className="ml-2 text-xs font-medium text-[var(--muted)]">Correo electrónico</span>
             <div className="relative mt-1">
               <Mail className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
               <Input
                 type="email"
+                name="email"
                 required
                 placeholder="tu@brigada.org"
                 className="pl-11"
@@ -38,6 +55,7 @@ export default function LoginPage() {
               <Lock className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
               <Input
                 type="password"
+                name="password"
                 required
                 placeholder="••••••••"
                 className="pl-11"
@@ -57,6 +75,7 @@ export default function LoginPage() {
           <Button
             size="lg"
             className="mt-2 w-full"
+            type="submit"
           >
             Ingresar
             <ArrowRight className="h-4 w-4" />
