@@ -15,6 +15,7 @@ export interface CreateCredentialsMemberData {
   generatedUsername: string
   plainPassword: string
   role: 'STAFF'
+  profileId?: string
 }
 
 export interface UpdateMemberData {

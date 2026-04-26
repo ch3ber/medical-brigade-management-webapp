@@ -7,6 +7,7 @@ interface GenerateStaffCredentialsDto {
   email: string
   generatedUsername: string
   plainPassword: string
+  profileId?: string
 }
 
 export class GenerateStaffCredentialsUseCase {
@@ -18,6 +19,7 @@ export class GenerateStaffCredentialsUseCase {
     email,
     generatedUsername,
     plainPassword,
+    profileId,
   }: GenerateStaffCredentialsDto): Promise<BrigadeMember> {
     const callerRole = await this.repo.getMemberRole(brigadeId, userId)
     if (callerRole !== 'DIRECTOR' && callerRole !== 'CO_DIRECTOR') throw new Error('SIN_PERMISO')
@@ -31,6 +33,7 @@ export class GenerateStaffCredentialsUseCase {
       generatedUsername,
       plainPassword,
       role: 'STAFF',
+      profileId,
     })
   }
 }

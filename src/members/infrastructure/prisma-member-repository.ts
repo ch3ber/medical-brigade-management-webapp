@@ -110,6 +110,7 @@ export class PrismaMemberRepository implements IMemberRepository {
         role: PrismaBrigadeRole.STAFF,
         generatedUsername: data.generatedUsername,
         generatedPasswordHash,
+        ...(data.profileId && { profileId: data.profileId, acceptedAt: new Date() }),
       },
     })
     return toDomain(row)

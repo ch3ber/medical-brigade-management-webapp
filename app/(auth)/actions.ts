@@ -17,8 +17,9 @@ function registerErrorCode(message: string): string {
 }
 
 export async function loginAction(formData: FormData) {
-  const email = formData.get('email') as string
+  const raw = (formData.get('email') as string).trim()
   const password = formData.get('password') as string
+  const email = raw.includes('@') ? raw : `${raw}@staff.local`
 
   const supabase = await createSupabaseServerClient()
   const { error } = await supabase.auth.signInWithPassword({ email, password })

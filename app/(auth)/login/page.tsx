@@ -54,14 +54,14 @@ export default async function LoginPage({ searchParams }: Props) {
           className="mt-10 space-y-4"
         >
           <label className="block">
-            <span className="ml-2 text-xs font-medium text-[var(--muted)]">Correo electrónico</span>
+            <span className="ml-2 text-xs font-medium text-[var(--muted)]">Usuario o correo</span>
             <div className="relative mt-1">
               <Mail className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
               <Input
-                type="email"
+                type="text"
                 name="email"
                 required
-                placeholder="tu@brigada.org"
+                placeholder="tu@brigada.org o pedro.42"
                 className="pl-11"
               />
             </div>
