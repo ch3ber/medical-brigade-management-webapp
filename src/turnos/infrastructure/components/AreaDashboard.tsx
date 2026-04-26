@@ -1,38 +1,44 @@
 import { CurrentTurnoDisplay } from './CurrentTurnoDisplay'
 import { WaitingQueue } from './WaitingQueue'
 import { ServedList } from './ServedList'
-import type { MockTurno } from '@/shared/lib/mock-data'
+import type { AuthenticatedAreaQueue } from '@/src/turnos/domain/repositories/ITurnoRepository'
 
-export interface AreaDashboardProps {
-  areaName: string
-  current?: MockTurno
-  waiting: MockTurno[]
-  served: MockTurno[]
+export type { AuthenticatedAreaQueue }
+
+interface AreaDashboardProps {
+  queue: AuthenticatedAreaQueue
+  onCallNext: () => Promise<void>
+  onMove: () => Promise<void>
+  onRemove: () => Promise<void>
 }
 
-export function AreaDashboard({ areaName, current, waiting, served }: AreaDashboardProps) {
+export function AreaDashboard({ queue, onCallNext, onMove, onRemove }: AreaDashboardProps) {
   return (
     <div className="space-y-5">
       <div>
         <p className="text-xs text-[var(--muted)]">Área</p>
-        <h2 className="text-xl font-bold">{areaName}</h2>
+        <h2 className="text-xl font-bold">{queue.area.nombre}</h2>
       </div>
       <CurrentTurnoDisplay
-        label={current?.label}
-        patientName={current?.patientName}
-        age={current?.age}
+        label={queue.turnoActual?.label}
+        patientName={queue.turnoActual?.patientName}
+        age={queue.turnoActual?.age}
+        areaColor={queue.area.color}
+        onCallNext={onCallNext}
+        onMove={onMove}
+        onRemove={onRemove}
       />
       <section>
         <div className="mb-2 flex items-center justify-between">
           <h3 className="text-sm font-semibold">En espera</h3>
-          <span className="text-xs text-[var(--muted)]">{waiting.length} personas</span>
+          <span className="text-xs text-[var(--muted)]">{queue.enEspera.length} personas</span>
         </div>
-        <WaitingQueue items={waiting} />
+        <WaitingQueue items={queue.enEspera} />
       </section>
-      {served.length > 0 && (
+      {queue.atendidos.length > 0 && (
         <section>
           <h3 className="mb-2 text-sm font-semibold">Atendidos recientemente</h3>
-          <ServedList items={served} />
+          <ServedList items={queue.atendidos} />
         </section>
       )}
     </div>

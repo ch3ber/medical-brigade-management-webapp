@@ -4,8 +4,27 @@ import { MobileShell } from '@/components/layout/MobileShell'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { loginAction } from '../actions'
 
-export default function LoginPage() {
+const MESSAGE_MAP: Record<string, string> = {
+  email_confirmation_required: 'Revisa tu correo para confirmar tu cuenta',
+}
+
+const ERROR_MAP: Record<string, string> = {
+  invalid_credentials: 'Correo o contraseña incorrectos',
+  email_not_confirmed: 'Debes confirmar tu correo antes de ingresar',
+  login_failed: 'Error al ingresar. Inténtalo de nuevo',
+}
+
+interface Props {
+  searchParams: Promise<{ error?: string; message?: string }>
+}
+
+export default async function LoginPage({ searchParams }: Props) {
+  const { error, message } = await searchParams
+  const infoMessage = message ? (MESSAGE_MAP[message] ?? null) : null
+  const displayError = error ? (ERROR_MAP[error] ?? null) : null
+
   return (
     <MobileShell>
       <PageHeader
@@ -18,15 +37,31 @@ export default function LoginPage() {
           <p className="text-sm text-[var(--muted)]">Ingresa para gestionar tu brigada.</p>
         </div>
 
-        <form className="mt-10 space-y-4">
+        {infoMessage && (
+          <div className="mt-4 rounded-[var(--radius-md)] bg-green-50 px-4 py-3 text-sm text-green-700">
+            {infoMessage}
+          </div>
+        )}
+
+        {displayError && (
+          <div className="mt-4 rounded-[var(--radius-md)] bg-red-50 px-4 py-3 text-sm text-red-600">
+            {displayError}
+          </div>
+        )}
+
+        <form
+          action={loginAction}
+          className="mt-10 space-y-4"
+        >
           <label className="block">
-            <span className="ml-2 text-xs font-medium text-[var(--muted)]">Correo electrónico</span>
+            <span className="ml-2 text-xs font-medium text-[var(--muted)]">Usuario o correo</span>
             <div className="relative mt-1">
               <Mail className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
               <Input
-                type="email"
+                type="text"
+                name="email"
                 required
-                placeholder="tu@brigada.org"
+                placeholder="tu@brigada.org o pedro.42"
                 className="pl-11"
               />
             </div>
@@ -38,6 +73,7 @@ export default function LoginPage() {
               <Lock className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
               <Input
                 type="password"
+                name="password"
                 required
                 placeholder="••••••••"
                 className="pl-11"
@@ -57,6 +93,7 @@ export default function LoginPage() {
           <Button
             size="lg"
             className="mt-2 w-full"
+            type="submit"
           >
             Ingresar
             <ArrowRight className="h-4 w-4" />

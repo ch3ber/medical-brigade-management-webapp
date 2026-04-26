@@ -1,15 +1,29 @@
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { Plus, Search, Filter } from 'lucide-react'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Input } from '@/components/ui/input'
 import { BrigadeCard } from '@/src/brigades/infrastructure/components/BrigadeCard'
-import { mockBrigades } from '@/shared/lib/mock-data'
+import { createSupabaseServerClient } from '@/shared/supabase/server'
+import { prisma } from '@/shared/prisma/client'
+import { PrismaBrigadeRepository } from '@/src/brigades/infrastructure/prisma-brigade-repository'
+import { ListBrigadesUseCase } from '@/src/brigades/application/use-cases/list-brigades'
 
-export default function BrigadeListPage() {
+export default async function BrigadeListPage() {
+  const supabase = await createSupabaseServerClient()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const brigades = await new ListBrigadesUseCase(new PrismaBrigadeRepository(prisma)).execute({
+    userId: user.id,
+  })
+
   return (
     <>
       <PageHeader
-        title="Brigades"
+        title="Brigadas"
         backHref="/dashboard"
         right={
           <Link
@@ -21,7 +35,6 @@ export default function BrigadeListPage() {
           </Link>
         }
       />
-
       <div className="px-5 pt-2">
         <div className="flex items-center gap-2">
           <div className="relative flex-1">
@@ -41,11 +54,11 @@ export default function BrigadeListPage() {
       </div>
 
       <div className="no-scrollbar flex gap-2 overflow-x-auto px-5 pt-5">
-        {(['Todas', 'Activas', 'Borrador', 'Cerradas'] as const).map((label, i) => (
+        {['Todas', 'Activas', 'Borrador', 'Cerradas'].map((label, i) => (
           <button
             key={label}
             className={
-              'shrink-0 rounded-full px-4 py-2 text-xs font-medium transition ' +
+              'shrink-0 rounded-full px-4 py-2 text-xs font-medium ' +
               (i === 0
                 ? 'bg-brand-gradient text-white'
                 : 'border border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)]')
@@ -57,12 +70,29 @@ export default function BrigadeListPage() {
       </div>
 
       <div className="space-y-3 px-5 pt-5">
-        {mockBrigades.map((b) => (
+        {brigades.map((b) => (
           <BrigadeCard
             key={b.id}
-            {...b}
+            id={b.id}
+            name={b.name}
+            location={b.location}
+            date={b.date.toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' })}
+            status={b.status}
+            patientsCount={b.patientsCount}
+            areasCount={b.areasCount}
           />
         ))}
+        {brigades.length === 0 && (
+          <p className="pt-10 text-center text-sm text-[var(--muted)]">
+            No tienes brigadas todavía.{' '}
+            <Link
+              href="/dashboard/brigades/new"
+              className="font-medium text-[var(--accent)]"
+            >
+              Crea una
+            </Link>
+          </p>
+        )}
       </div>
     </>
   )

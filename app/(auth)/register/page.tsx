@@ -4,8 +4,23 @@ import { MobileShell } from '@/components/layout/MobileShell'
 import { PageHeader } from '@/components/layout/PageHeader'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { registerAction } from '../actions'
 
-export default function RegisterPage() {
+const ERROR_MAP: Record<string, string> = {
+  passwords_mismatch: 'Las contraseñas no coinciden',
+  user_already_registered: 'Ya existe una cuenta con este correo',
+  weak_password: 'La contraseña debe tener al menos 8 caracteres',
+  register_failed: 'Error al crear la cuenta. Inténtalo de nuevo',
+}
+
+interface Props {
+  searchParams: Promise<{ error?: string }>
+}
+
+export default async function RegisterPage({ searchParams }: Props) {
+  const { error } = await searchParams
+  const displayError = error ? (ERROR_MAP[error] ?? null) : null
+
   return (
     <MobileShell>
       <PageHeader
@@ -18,12 +33,22 @@ export default function RegisterPage() {
           <p className="text-sm text-[var(--muted)]">Crea una cuenta para gestionar tu brigada.</p>
         </div>
 
-        <form className="mt-10 space-y-4">
+        {displayError && (
+          <div className="mt-4 rounded-[var(--radius-md)] bg-red-50 px-4 py-3 text-sm text-red-600">
+            {displayError}
+          </div>
+        )}
+
+        <form
+          action={registerAction}
+          className="mt-10 space-y-4"
+        >
           <label className="block">
             <span className="ml-2 text-xs font-medium text-[var(--muted)]">Nombre completo</span>
             <div className="relative mt-1">
               <User className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
               <Input
+                name="fullName"
                 required
                 placeholder="María López"
                 className="pl-11"
@@ -37,6 +62,7 @@ export default function RegisterPage() {
               <Mail className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
               <Input
                 type="email"
+                name="email"
                 required
                 placeholder="tu@brigada.org"
                 className="pl-11"
@@ -50,6 +76,7 @@ export default function RegisterPage() {
               <Lock className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
               <Input
                 type="password"
+                name="password"
                 required
                 placeholder="Mínimo 8 caracteres"
                 className="pl-11"
@@ -63,6 +90,7 @@ export default function RegisterPage() {
               <Lock className="absolute top-1/2 left-4 h-4 w-4 -translate-y-1/2 text-[var(--muted)]" />
               <Input
                 type="password"
+                name="confirmPassword"
                 required
                 placeholder="Repite la contraseña"
                 className="pl-11"
@@ -73,6 +101,7 @@ export default function RegisterPage() {
           <Button
             size="lg"
             className="mt-4 w-full"
+            type="submit"
           >
             Crear cuenta
             <ArrowRight className="h-4 w-4" />
