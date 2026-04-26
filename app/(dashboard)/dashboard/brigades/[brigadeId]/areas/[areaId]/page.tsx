@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation'
 import { PageHeader } from '@/components/layout/PageHeader'
-import { AreaDashboard } from '@/src/turnos/infrastructure/components/AreaDashboard'
+import { AreaDashboardRealtime } from '@/src/turnos/infrastructure/components/AreaDashboardRealtime'
 import { createSupabaseServerClient } from '@/shared/supabase/server'
 import { prisma } from '@/shared/prisma/client'
 import { PrismaTurnoRepository } from '@/src/turnos/infrastructure/prisma-turno-repository'
@@ -39,7 +39,7 @@ export default async function AreaQueuePage({ params }: Props) {
         backHref={`/dashboard/brigades/${brigadeId}`}
       />
       <div className="px-5 pt-2 pb-4">
-        <AreaDashboard
+        <AreaDashboardRealtime
           queue={queue}
           onCallNext={onCallNext}
           onMove={onMove}
