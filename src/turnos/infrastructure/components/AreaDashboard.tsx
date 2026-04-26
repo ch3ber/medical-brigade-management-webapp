@@ -23,6 +23,7 @@ export function AreaDashboard({ queue, onCallNext, onMove, onRemove }: AreaDashb
         label={queue.turnoActual?.label}
         patientName={queue.turnoActual?.patientName}
         age={queue.turnoActual?.age}
+        areaColor={queue.area.color}
         onCallNext={onCallNext}
         onMove={onMove}
         onRemove={onRemove}

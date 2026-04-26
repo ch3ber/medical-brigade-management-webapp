@@ -22,7 +22,7 @@ export async function registerPatientAction(brigadeId: string, formData: FormDat
   const areaIds = formData.getAll('areaIds') as string[]
 
   const repo = new PrismaPatientRepository(prisma)
-  await new RegisterPatientUseCase(repo).execute({
+  const result = await new RegisterPatientUseCase(repo).execute({
     brigadeId,
     userId: user.id,
     fullName,
@@ -34,5 +34,5 @@ export async function registerPatientAction(brigadeId: string, formData: FormDat
     areaIds,
   })
 
-  redirect(`/dashboard/brigades/${brigadeId}`)
+  redirect(`/dashboard/brigades/${brigadeId}/patients/${result.patient.id}/ticket`)
 }

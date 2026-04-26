@@ -7,6 +7,8 @@ import { prisma } from '@/shared/prisma/client'
 import { PrismaBrigadeRepository } from '@/src/brigades/infrastructure/prisma-brigade-repository'
 import { PrismaAreaRepository } from '@/src/areas/infrastructure/prisma-area-repository'
 import { UpdateBrigadeUseCase } from '@/src/brigades/application/use-cases/update-brigade'
+import { OpenBrigadeUseCase } from '@/src/brigades/application/use-cases/open-brigade'
+import { CloseBrigadeUseCase } from '@/src/brigades/application/use-cases/close-brigade'
 import { CreateAreaUseCase } from '@/src/areas/application/use-cases/create-area'
 import { UpdateAreaUseCase } from '@/src/areas/application/use-cases/update-area'
 import { DeleteAreaUseCase } from '@/src/areas/application/use-cases/delete-area'
@@ -92,4 +94,24 @@ export async function deleteAreaAction(brigadeId: string, areaId: string) {
   await new DeleteAreaUseCase(repo).execute({ brigadeId, areaId, userId: user.id })
 
   revalidatePath(`/dashboard/brigades/${brigadeId}/settings`)
+}
+
+export async function openBrigadeAction(brigadeId: string) {
+  const user = await getAuthUser()
+
+  const repo = new PrismaBrigadeRepository(prisma)
+  await new OpenBrigadeUseCase(repo).execute({ brigadeId, userId: user.id })
+
+  revalidatePath(`/dashboard/brigades/${brigadeId}`)
+  revalidatePath('/dashboard')
+}
+
+export async function closeBrigadeAction(brigadeId: string) {
+  const user = await getAuthUser()
+
+  const repo = new PrismaBrigadeRepository(prisma)
+  await new CloseBrigadeUseCase(repo).execute({ brigadeId, userId: user.id })
+
+  revalidatePath(`/dashboard/brigades/${brigadeId}`)
+  revalidatePath('/dashboard')
 }
