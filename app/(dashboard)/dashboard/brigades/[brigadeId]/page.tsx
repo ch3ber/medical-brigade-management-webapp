@@ -160,6 +160,36 @@ export default async function BrigadeDetailPage({ params }: Props) {
         </section>
       )}
 
+      {/* Staff link — always visible */}
+      <section className="px-5 pt-3">
+        <Link href={`/dashboard/brigades/${brigadeId}/staff`}>
+          <div className="flex items-center justify-between rounded-2xl bg-[var(--surface)] px-4 py-3 transition hover:bg-white">
+            <div className="flex items-center gap-3">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#e7eaff]">
+                <Users className="h-4 w-4 text-[#5b6cf5]" />
+              </span>
+              <div>
+                <p className="text-sm font-semibold">Personal</p>
+                <p className="text-xs text-[var(--muted)]">Invitar o gestionar miembros</p>
+              </div>
+            </div>
+            <svg
+              className="h-4 w-4 text-[var(--muted)]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </div>
+        </Link>
+      </section>
+
       {/* Areas list */}
       {!isDraft && (
         <section className="px-5 pt-6 pb-4">
